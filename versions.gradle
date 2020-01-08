@@ -1,0 +1,260 @@
+/**
+ * Shared file between builds so that they can all use the same dependencies and
+ * maven repositories.
+ **/
+ext.deps = [:]
+def versions = [:]
+versions.arch = "1.1.0"
+versions.room = "1.1.1"
+versions.support = "1.1.0"
+versions.dagger = "2.11"
+versions.junit = "4.12"
+versions.espresso = "3.0.1"
+versions.retrofit = "2.3.0"
+versions.mockwebserver = "3.8.1"
+versions.apache_commons = "2.5"
+versions.mockito = "2.7.19"
+versions.mockito_all = "1.10.19"
+versions.dexmaker = "2.2.0"
+versions.constraint_layout = "2.0.0-beta2"
+versions.glide = "4.8.0"
+versions.timber = "4.5.1"
+versions.android_gradle_plugin = '3.5.3'
+versions.rxjava2 = "2.1.5"
+versions.rx_android = "2.0.1"
+versions.arouter_version = "1.2.4"
+versions.arouter_processor_version = "1.2.2"
+versions.atsl_runner = "1.0.1"
+versions.atsl_rules = "1.0.1"
+versions.hamcrest = "1.3"
+versions.kotlin = "1.3.31"
+versions.paging = "1.0.0-alpha3"
+versions.okhttp3 = "3.9.0"
+versions.butterknife = "8.8.1"
+versions.logutils_version = "1.5.1.1"
+versions.gson = "2.8.1"
+versions.eventbus = "3.0.0"
+versions.avi = "2.1.3"
+versions.universaltoast = "1.0.8"
+versions.leakcanary = "1.5.4"
+versions.android_processes = "1.1.1"
+versions.spider_man = "1.1.1"
+versions.lifecycle = "1.1.1"
+versions.runner = "1.0.1"
+versions.rxkotlin2 = "2.2.0"
+versions.aspectjrt = "1.8.9"
+versions.multidex = "1.0.3"
+versions.gradle_android_plugin_aspectjx = "2.0.0"
+versions.nineoldandroids = "2.4.0"
+versions.material = "1.1.0-alpha10"
+versions.cardview = "1.0.0"
+def deps = [:]
+
+def support = [:]
+support.annotations = "androidx.annotation:annotation:$versions.support"
+support.app_compat = "androidx.appcompat:appcompat:$versions.support"
+support.recyclerview = "androidx.recyclerview:recyclerview:$versions.support"
+support.cardview = "androidx.cardview:cardview:$versions.cardview"
+support.design = "com.google.android.material:material:$versions.material"
+support.v4 = "androidx.legacy:legacy-support-v4:$versions.support"
+support.core_utils = "androidx.legacy:legacy-support-core-utils:$versions.support"
+support.constraint_layout = "androidx.constraintlayout:constraintlayout:$versions.constraint_layout"
+deps.support = support
+
+def room = [:]
+room.runtime = "android.arch.persistence.room:runtime:$versions.room"
+room.compiler = "android.arch.persistence.room:compiler:$versions.room"
+room.rxjava2 = "android.arch.persistence.room:rxjava2:$versions.room"
+room.testing = "android.arch.persistence.room:testing:$versions.room"
+deps.room = room
+
+def lifecycle = [:]
+lifecycle.runtime = "android.arch.lifecycle:runtime:$versions.arch"
+lifecycle.extensions = "android.arch.lifecycle:extensions:$versions.arch"
+lifecycle.java8 = "android.arch.lifecycle:common-java8:$versions.arch"
+lifecycle.compiler = "android.arch.lifecycle:compiler:$versions.arch"
+deps.lifecycle = lifecycle
+
+def arch = [:]
+arch.testing = "android.arch.core:core-testing:$versions.arch"
+arch.paging = "android.arch.paging:runtime:$versions.paging"
+deps.arch = arch
+
+def okhttp3 = [:]
+okhttp3.okhttp3 = "com.squareup.okhttp3:okhttp:$versions.okhttp3"
+okhttp3.okhttp3_logging_interceptor = "com.squareup.okhttp3:logging-interceptor:$versions.okhttp3"
+okhttp3.mock_web_server = "com.squareup.okhttp3:mockwebserver:$versions.mockwebserver"
+deps.okhttp3 = okhttp3
+
+def butterknife = [:]
+butterknife.runtime = "com.jakewharton:butterknife:$versions.butterknife"
+butterknife.compiler = "com.jakewharton:butterknife-compiler:$versions.butterknife"
+deps.butterknife = butterknife
+
+def arouter = [:]
+arouter.runtime = "com.alibaba:arouter-api:$versions.arouter_version"
+arouter.compiler = "com.alibaba:arouter-compiler:$versions.arouter_processor_version"
+deps.arouter = arouter
+
+def retrofit = [:]
+retrofit.runtime = "com.squareup.retrofit2:retrofit:$versions.retrofit"
+retrofit.gson = "com.squareup.retrofit2:converter-gson:$versions.retrofit"
+retrofit.adapter_rxjava2 = "com.squareup.retrofit2:adapter-rxjava2:$versions.retrofit"
+deps.retrofit = retrofit
+
+def dagger = [:]
+dagger.runtime = "com.google.dagger:dagger:$versions.dagger"
+dagger.android = "com.google.dagger:dagger-android:$versions.dagger"
+dagger.android_support = "com.google.dagger:dagger-android-support:$versions.dagger"
+dagger.compiler = "com.google.dagger:dagger-compiler:$versions.dagger"
+dagger.android_support_compiler = "com.google.dagger:dagger-android-processor:$versions.dagger"
+deps.dagger = dagger
+
+def espresso = [:]
+espresso.core = "com.android.support.test.espresso:espresso-core:$versions.espresso"
+espresso.contrib = "com.android.support.test.espresso:espresso-contrib:$versions.espresso"
+espresso.intents = "com.android.support.test.espresso:espresso-intents:$versions.espresso"
+deps.espresso = espresso
+
+def runner = [:]
+runner.runner = "com.android.support.test:runner:$versions.runner"
+deps.runner = runner
+
+def atsl = [:]
+atsl.runner = "com.android.support.test:runner:$versions.atsl_runner"
+atsl.rules = "com.android.support.test:rules:$versions.atsl_runner"
+deps.atsl = atsl
+
+def mockito = [:]
+mockito.core = "org.mockito:mockito-core:$versions.mockito"
+mockito.all = "org.mockito:mockito-all:$versions.mockito_all"
+deps.mockito = mockito
+
+def kotlin = [:]
+kotlin.stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
+kotlin.test = "org.jetbrains.kotlin:kotlin-test-junit:$versions.kotlin"
+deps.kotlin = kotlin
+
+def leakcanary = [:]
+leakcanary.debug = "com.squareup.leakcanary:leakcanary-android:$versions.leakcanary"
+leakcanary.release = "com.squareup.leakcanary:leakcanary-android-no-op:$versions.leakcanary"
+leakcanary.test = "com.squareup.leakcanary:leakcanary-android-no-op:$versions.leakcanary"
+deps.leakcanary = leakcanary
+
+def spiderman = [:]
+spiderman.debug = "com.simple:spiderman:$versions.spider_man"
+spiderman.release = "com.simple:spiderman-no-op:$versions.spider_man"
+deps.spiderman = spiderman
+
+def glide = [:]
+glide.glide = "com.github.bumptech.glide:glide:$versions.glide"
+glide.compiler = "com.github.bumptech.glide:compiler:$versions.glide"
+deps.glide = glide
+
+def dexmaker = [:]
+dexmaker.dexmaker = "com.linkedin.dexmaker:dexmaker-mockito:$versions.dexmaker"
+deps.dexmaker = dexmaker
+
+def timber = [:]
+timber.timber = "com.jakewharton.timber:timber:$versions.timber"
+deps.timber = timber
+
+def junit = [:]
+junit.junit = "junit:junit:$versions.junit"
+deps.junit = junit
+
+def rxjava2 = [:]
+rxjava2.rxjava2 = "io.reactivex.rxjava2:rxjava:$versions.rxjava2"
+rxjava2.rx_android = "io.reactivex.rxjava2:rxandroid:$versions.rx_android"
+rxjava2.rxkotlin2 = "io.reactivex.rxjava2:rxkotlin:$versions.rxkotlin2"
+deps.rxjava2 = rxjava2
+
+def logutils = [:]
+logutils.logutils = "com.apkfuns.logutils:library:$versions.logutils_version"
+deps.logutils = logutils
+
+def hamcrest = [:]
+hamcrest.hamcrest = "org.hamcrest:hamcrest-all:$versions.hamcrest"
+deps.hamcrest = hamcrest
+
+def gson = [:]
+gson.gson = "com.google.code.gson:gson:$versions.gson"
+deps.gson = gson
+
+def eventbus = [:]
+eventbus.eventbus = "org.greenrobot:eventbus:$versions.eventbus"
+deps.eventbus = eventbus
+
+def avi = [:]
+avi.avi = "com.wang.avi:library:$versions.avi"
+deps.avi = avi
+
+def universaltoast = [:]
+universaltoast.universaltoast = "com.github.bboylin:UniversalToast:$versions.universaltoast"
+deps.universaltoast = universaltoast
+
+def android_processes = [:]
+android_processes.android_processes = "com.jaredrummler:android-processes:$versions.android_processes"
+deps.android_processes = android_processes
+
+def aspectj = [:]
+aspectj.aspectjrt = "org.aspectj:aspectjrt:$versions.aspectjrt"
+deps.aspectj = aspectj
+
+def multidex = [:]
+multidex.multidex = "com.android.support:multidex:$versions.multidex"
+deps.multidex = multidex
+
+def nineoldandroids = [:]
+nineoldandroids.nineoldandroids = "com.nineoldandroids:library:$versions.nineoldandroids"
+deps.nineoldandroids = nineoldandroids
+
+def plugin = [:]
+plugin.android_gradle_plugin = "com.android.tools.build:gradle:$versions.android_gradle_plugin"
+plugin.kotlin_gradle_plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
+plugin.gradle_android_plugin_aspectjx = "com.hujiang.aspectjx:gradle-android-plugin-aspectjx:$versions.gradle_android_plugin_aspectjx"
+deps.plugin = plugin
+
+
+
+def build_versions = [:]
+build_versions.min_sdk = 19
+build_versions.target_sdk = 26
+build_versions.version_code = 100
+build_versions.version_name = "1.0.0"
+build_versions.build_tools = "28.0.3"
+ext.build_versions = build_versions
+
+
+ext.deps = deps
+
+//使用阿里的镜像，避免被墙，你懂的
+def addRepos(RepositoryHandler handler) {
+    handler.maven {
+        url 'https://maven.aliyun.com/nexus/content/repositories/google'
+        name 'Google'
+    }  //阿里google
+
+    handler.maven { url 'https://maven.aliyun.com/nexus/content/repositories/jcenter' }  //阿里的jcenter
+    handler.maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }  //阿里的mavenCentral
+    handler.maven { url 'https://oss.jfrog.org/libs-snapshot' }
+    handler.maven { url 'https://jitpack.io' }
+
+}
+
+ext.addRepos = this.&addRepos
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

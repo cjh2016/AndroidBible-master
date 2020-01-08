@@ -1,0 +1,112 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion build_versions.target_sdk
+
+    defaultConfig {
+        minSdkVersion build_versions.min_sdk
+        targetSdkVersion build_versions.target_sdk
+        versionCode build_versions.version_code
+        versionName build_versions.version_name
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    kapt {
+        arguments {
+            arg("AROUTER_MODULE_NAME", project.getName())
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    //support
+    api deps.support.app_compat
+    api deps.support.design
+    api(deps.support.constraint_layout) {
+        exclude group: "com.android.support"
+    }
+
+    api deps.support.recyclerview
+    api deps.support.cardview
+
+    //kotlin
+    api deps.kotlin.stdlib
+
+    //retrofit
+    api deps.retrofit.runtime
+    api deps.retrofit.gson
+    api deps.retrofit.adapter_rxjava2
+
+    //lifecycle
+    api deps.lifecycle.runtime
+    api deps.lifecycle.extensions
+    annotationProcessor deps.lifecycle.compiler
+
+    //glide
+    api (deps.glide.glide) {
+        exclude group: 'com.android.support'
+    }
+
+
+    //arouter
+    api deps.arouter.runtime
+    kapt deps.arouter.compiler
+
+    //room
+    api deps.room.runtime
+    api deps.room.rxjava2
+    kapt deps.room.compiler
+
+    //test
+    testApi deps.junit.junit
+    androidTestApi deps.runner.runner
+    androidTestApi deps.espresso.core
+
+    //aspectj
+    api deps.aspectj.aspectjrt
+
+    //eventbus
+    api deps.eventbus.eventbus
+
+    // RxJava2 RxAndroid2
+    api deps.rxjava2.rxkotlin2
+    api deps.rxjava2.rx_android
+
+    //AVLoadingIndicatorView
+    api deps.avi.avi
+
+    //leakcanary
+    debugApi deps.leakcanary.debug
+    releaseApi deps.leakcanary.release
+    testApi deps.leakcanary.test
+
+    //spiderman
+    debugApi(deps.spiderman.debug) {
+        exclude group: "com.android.support"
+    }
+
+    releaseApi(deps.spiderman.release) {
+        exclude group: "com.android.support"
+    }
+
+    //nineoldandroids
+    api deps.nineoldandroids.nineoldandroids
+
+}
