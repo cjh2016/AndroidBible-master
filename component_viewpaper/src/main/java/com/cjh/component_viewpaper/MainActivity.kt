@@ -1,9 +1,9 @@
 package com.cjh.component_viewpaper
 
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import com.cjh.component_viewpaper.activity.FragmentPagerActivity
 import com.cjh.component_viewpaper.activity.FragmentStatePagerActivity
 import com.cjh.component_viewpaper.activity.ViewPagerActivity

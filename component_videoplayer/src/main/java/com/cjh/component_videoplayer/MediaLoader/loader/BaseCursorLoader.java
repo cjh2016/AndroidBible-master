@@ -2,9 +2,7 @@ package com.cjh.component_videoplayer.MediaLoader.loader;
 
 
 import android.content.Context;
-import android.net.Uri;
-import android.support.v4.content.CursorLoader;
-
+import androidx.loader.content.CursorLoader;
 import com.cjh.component_videoplayer.MediaLoader.inter.ILoader;
 
 /**

@@ -1,6 +1,7 @@
 package com.cjh.component_videoplayer.playerbase.config;
 
-import android.support.v4.util.SparseArrayCompat;
+import androidx.collection.SparseArrayCompat;
+
 import com.cjh.component_videoplayer.playerbase.entity.DecoderPlan;
 import com.cjh.component_videoplayer.playerbase.player.SysMediaPlayer;
 

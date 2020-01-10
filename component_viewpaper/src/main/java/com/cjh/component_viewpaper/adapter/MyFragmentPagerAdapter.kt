@@ -1,8 +1,9 @@
 package com.cjh.component_viewpaper.adapter
 
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
+
 
 /**
  * 当页卡是Fragment时：用FragmentPagerAdapter
@@ -16,11 +17,11 @@ class MyFragmentPagerAdapter @JvmOverloads constructor(fm: FragmentManager, priv
     /**
      *  根据Item的位置返回对应位置的Fragment，绑定item和Fragment
      * */
-    override fun getItem(position: Int): Fragment? {
+    override fun getItem(position: Int): Fragment {
         listFragments?.run {
             return get(position)
         }
-        return null
+        return Fragment()
     }
 
     /**

@@ -1,7 +1,9 @@
 package com.cjh.component_videoplayer.playerbase.provider;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
+
 import com.cjh.component_videoplayer.playerbase.entity.DataSource;
 import com.cjh.component_videoplayer.playerbase.event.BundlePool;
 import com.cjh.component_videoplayer.playerbase.event.EventKey;

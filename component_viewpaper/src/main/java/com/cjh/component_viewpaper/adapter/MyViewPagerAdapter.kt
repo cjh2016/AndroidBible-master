@@ -1,8 +1,8 @@
 package com.cjh.component_viewpaper.adapter
 
-import android.support.v4.view.PagerAdapter
 import android.view.View
 import android.view.ViewGroup
+import androidx.viewpager.widget.PagerAdapter
 
 /**
  * 当页卡是View时：用PagerAdapter
@@ -24,7 +24,7 @@ class MyViewPagerAdapter(private val listViews: List<View>?): PagerAdapter() {
     /**
      *  这个方法用来实例化页卡
      * */
-    override fun instantiateItem(container: ViewGroup?, position: Int): Any {
+    override fun instantiateItem(container: ViewGroup, position: Int): Any {
         listViews?.let {
             container?.addView(it[position], 0)  //添加页卡
             return it[position]
@@ -35,15 +35,15 @@ class MyViewPagerAdapter(private val listViews: List<View>?): PagerAdapter() {
     /**
      *  删除页卡
      * */
-    override fun destroyItem(container: ViewGroup?, position: Int, `object`: Any?) {
+    override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
         listViews?.let {
-            container?.removeView(it[position])
+            container.removeView(it[position])
             return
         }
-        super.destroyItem(container, position, `object`)
+        super.destroyItem(container!!, position, `object`)
     }
 
-    override fun isViewFromObject(view: View?, `object`: Any?): Boolean {
+    override fun isViewFromObject(view: View, `object`: Any): Boolean {
         return view == `object`  //Google官方提示这样写
     }
 

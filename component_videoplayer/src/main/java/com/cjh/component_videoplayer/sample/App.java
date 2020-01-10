@@ -3,7 +3,8 @@ package com.cjh.component_videoplayer.sample;
 import android.app.Application;
 import android.content.Context;
 import android.os.Environment;
-import android.support.multidex.MultiDex;
+
+import androidx.multidex.MultiDex;
 
 import com.cjh.component_videoplayer.exoplayer.ExoMediaPlayer;
 import com.cjh.component_videoplayer.ijkplayer.IjkPlayer;

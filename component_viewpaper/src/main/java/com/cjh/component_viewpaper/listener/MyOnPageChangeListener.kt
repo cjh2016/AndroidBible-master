@@ -1,7 +1,7 @@
 package com.cjh.component_viewpaper.listener
 
-import android.support.v4.view.ViewPager
 import android.util.Log
+import androidx.viewpager.widget.ViewPager
 
 /**
  * @author: caijianhui

@@ -3,9 +3,10 @@ package com.cjh.component_videoplayer.playerbase.style;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.support.v4.view.ViewCompat;
 import android.view.View;
+
+import androidx.annotation.RequiresApi;
+import androidx.core.view.ViewCompat;
 
 /**
  * @author: caijianhui

@@ -4,12 +4,9 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.text.style.ParagraphStyle
-import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import com.cjh.component_textview.custom.ExpandableTextView
-import com.cjh.component_textview.span.SparkSpan
 import com.cjh.component_textview.ui.activity.SpanActivity
 import java.lang.StringBuilder
 

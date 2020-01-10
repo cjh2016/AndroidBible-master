@@ -1,10 +1,8 @@
 package com.cjh.component_videoplayer.sample.adapter;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-
-import java.util.List;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 
 /**
  * @author: caijianhui
@@ -12,8 +10,6 @@ import java.util.List;
  * @description:
  */
 public class VideoListPagerAdapter extends FragmentStatePagerAdapter {
-
-
 
     public VideoListPagerAdapter(FragmentManager fm) {
         super(fm);

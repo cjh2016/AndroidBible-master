@@ -2,9 +2,11 @@ package com.cjh.component_videoplayer.playerbase.receiver;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.cjh.component_videoplayer.playerbase.log.PLog;
 import com.cjh.component_videoplayer.playerbase.receiver.*;
 

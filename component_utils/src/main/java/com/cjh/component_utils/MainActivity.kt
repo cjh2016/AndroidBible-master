@@ -1,7 +1,7 @@
 package com.cjh.component_utils
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.cjh.lib_basissdk.util.BatteryUtils
 
 class MainActivity : AppCompatActivity() {

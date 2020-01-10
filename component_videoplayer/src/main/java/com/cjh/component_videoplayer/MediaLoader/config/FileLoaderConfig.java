@@ -1,6 +1,5 @@
 package com.cjh.component_videoplayer.MediaLoader.config;
 
-import android.support.v4.app.Fragment;
 
 import java.util.ArrayList;
 import java.util.List;

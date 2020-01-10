@@ -3,15 +3,12 @@ package com.cjh.component_videoplayer.MediaLoader.callback;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.support.v4.content.Loader;
-
+import androidx.loader.content.Loader;
 import com.cjh.component_videoplayer.MediaLoader.bean.PhotoFolder;
 import com.cjh.component_videoplayer.MediaLoader.bean.PhotoItem;
 import com.cjh.component_videoplayer.MediaLoader.bean.PhotoResult;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import static android.provider.BaseColumns._ID;
 import static android.provider.MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME;
 import static android.provider.MediaStore.Images.ImageColumns.BUCKET_ID;

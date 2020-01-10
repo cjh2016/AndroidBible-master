@@ -5,11 +5,12 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.support.v4.view.ViewCompat;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
+
+import androidx.annotation.RequiresApi;
+import androidx.core.view.ViewCompat;
 
 import com.cjh.component_videoplayer.playerbase.style.IStyleSetter;
 import com.cjh.component_videoplayer.playerbase.style.StyleSetter;

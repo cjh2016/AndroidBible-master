@@ -1,8 +1,7 @@
 package com.cjh.component_videoplayer.MediaLoader.callback;
 
 import android.database.Cursor;
-import android.support.v4.content.Loader;
-
+import androidx.loader.content.Loader;
 import com.cjh.component_videoplayer.MediaLoader.inter.ILoader;
 
 /**

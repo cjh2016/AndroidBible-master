@@ -1,16 +1,14 @@
 package com.cjh.component_viewpaper.activity
 
 import android.os.Bundle
-import android.support.v4.view.ViewPager
-import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.viewpager.widget.ViewPager
 import com.cjh.component_viewpaper.listener.MyOnPageChangeListener
 import com.cjh.component_viewpaper.R
 import com.cjh.component_viewpaper.adapter.MyViewPagerAdapter
 import com.cjh.component_viewpaper.transformer.ZoomInTransformer
-import com.cjh.component_viewpaper.transformer.ZoomOutSlideTransformer
-import com.cjh.component_viewpaper.transformer.ZoomOutTransformer
 import java.util.ArrayList
 
 /**

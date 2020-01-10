@@ -3,15 +3,12 @@ package com.cjh.component_videoplayer.MediaLoader.callback;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.support.v4.content.Loader;
-
+import androidx.loader.content.Loader;
 import com.cjh.component_videoplayer.MediaLoader.bean.VideoFolder;
 import com.cjh.component_videoplayer.MediaLoader.bean.VideoItem;
 import com.cjh.component_videoplayer.MediaLoader.bean.VideoResult;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import static android.provider.BaseColumns._ID;
 import static android.provider.MediaStore.MediaColumns.DATA;
 import static android.provider.MediaStore.MediaColumns.DATE_MODIFIED;

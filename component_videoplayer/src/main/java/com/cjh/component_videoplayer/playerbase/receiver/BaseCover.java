@@ -2,8 +2,10 @@ package com.cjh.component_videoplayer.playerbase.receiver;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.IntRange;
 import android.view.View;
+
+import androidx.annotation.IntRange;
+
 import com.cjh.component_videoplayer.playerbase.assist.InterEvent;
 
 /**

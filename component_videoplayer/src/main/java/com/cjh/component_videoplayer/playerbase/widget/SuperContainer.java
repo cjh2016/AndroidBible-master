@@ -2,12 +2,13 @@ package com.cjh.component_videoplayer.playerbase.widget;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+
+import androidx.annotation.NonNull;
 
 import com.cjh.component_videoplayer.playerbase.event.EventDispatcher;
 import com.cjh.component_videoplayer.playerbase.event.IEventDispatcher;

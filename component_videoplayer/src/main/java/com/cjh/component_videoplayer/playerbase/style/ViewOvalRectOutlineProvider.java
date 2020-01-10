@@ -3,9 +3,9 @@ package com.cjh.component_videoplayer.playerbase.style;
 import android.graphics.Outline;
 import android.graphics.Rect;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.view.View;
 import android.view.ViewOutlineProvider;
+import androidx.annotation.RequiresApi;
 import com.cjh.component_videoplayer.playerbase.utils.RectUtils;
 
 /**

@@ -1,8 +1,9 @@
 package com.cjh.component_viewpaper.adapter
 
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentStatePagerAdapter
+
 
 /**
  * 当页卡是Fragment时：用FragmentPagerAdapter
@@ -13,11 +14,11 @@ import android.support.v4.app.FragmentStatePagerAdapter
  */
 class MyFragmentStatePagerAdapter(fm: FragmentManager, private val listFragments: List<Fragment>? = null): FragmentStatePagerAdapter(fm) {
 
-    override fun getItem(position: Int): Fragment? {
+    override fun getItem(position: Int): Fragment {
         listFragments?.let {
             return it[position]
         }
-        return null
+        return Fragment()
     }
 
     override fun getCount(): Int {

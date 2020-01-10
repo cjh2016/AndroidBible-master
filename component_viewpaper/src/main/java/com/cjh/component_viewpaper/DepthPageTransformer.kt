@@ -1,8 +1,8 @@
 package com.cjh.component_viewpaper
 
-import android.support.v4.view.ViewPager
 import android.util.Log
 import android.view.View
+import androidx.viewpager.widget.ViewPager
 import com.nineoldandroids.view.ViewHelper
 
 /**
@@ -19,9 +19,9 @@ class DepthPageTransformer: ViewPager.PageTransformer {
      *  当我们滑动时：会打印出当前ViewPager中存活的每个View以及它们的position的变化~~注意是每一个，
      *  所以建议别只log position，不然你会觉得莫名其妙的输出~~
      * */
-    override fun transformPage(page: View?, position: Float) {
+    override fun transformPage(page: View, position: Float) {
         Log.i(TAG, "DepthPageTransformer transformPage position = $position  page = $page")
-        val pageWidth = page?.width
+        val pageWidth = page.width
         page?.run {
             when {
                 position < -1 -> {   // [-Infinity, -1)  表示当前的View处在屏幕的左边

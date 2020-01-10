@@ -1,15 +1,13 @@
 package com.cjh.component_textview.ui.activity
 
 import android.animation.ObjectAnimator
-import android.animation.ValueAnimator
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.AppCompatTextView
 import android.text.SpannableString
 import android.text.Spanned
 import android.util.Log
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
+import androidx.appcompat.app.AppCompatActivity
 import com.cjh.component_textview.R
 import com.cjh.component_textview.span.RectSpan
 import com.cjh.component_textview.span.SparkSpan
