@@ -4,86 +4,129 @@
  **/
 ext.deps = [:]
 def versions = [:]
-versions.arch = "1.1.0"
-versions.room = "1.1.1"
-versions.support = "1.1.0"
-versions.dagger = "2.11"
-versions.junit = "4.12"
-versions.espresso = "3.0.1"
-versions.retrofit = "2.3.0"
-versions.mockwebserver = "3.8.1"
-versions.apache_commons = "2.5"
-versions.mockito = "2.7.19"
-versions.mockito_all = "1.10.19"
-versions.dexmaker = "2.2.0"
-versions.constraint_layout = "2.0.0-beta2"
-versions.glide = "4.8.0"
-versions.timber = "4.5.1"
-versions.android_gradle_plugin = '3.5.3'
-versions.rxjava2 = "2.1.5"
-versions.rx_android = "2.0.1"
-versions.arouter_version = "1.2.4"
-versions.arouter_processor_version = "1.2.2"
-versions.atsl_runner = "1.0.1"
-versions.atsl_rules = "1.0.1"
-versions.hamcrest = "1.3"
-versions.kotlin = "1.3.31"
-versions.paging = "1.0.0-alpha3"
-versions.okhttp3 = "3.9.0"
-versions.butterknife = "8.8.1"
-versions.logutils_version = "1.5.1.1"
-versions.gson = "2.8.1"
-versions.eventbus = "3.0.0"
+
 versions.avi = "2.1.3"
-versions.universaltoast = "1.0.8"
-versions.leakcanary = "1.5.4"
-versions.android_processes = "1.1.1"
-versions.spider_man = "1.1.1"
-versions.lifecycle = "1.1.1"
-versions.runner = "1.0.1"
-versions.rxkotlin2 = "2.2.0"
+versions.arch = "2.1.0"
+versions.appcompat = "1.1.0"
 versions.aspectjrt = "1.8.9"
-versions.multidex = "1.0.3"
-versions.gradle_android_plugin_aspectjx = "2.0.0"
-versions.nineoldandroids = "2.4.0"
-versions.material = "1.1.0-alpha10"
+versions.annotation = "1.1.0"
+versions.arouter_version = "1.2.4"
+versions.android_processes = "1.1.1"
+versions.android_gradle_plugin = '3.5.3'
+versions.arouter_processor_version = "1.2.2"
+
+versions.butterknife = "8.8.1"
+
 versions.cardview = "1.0.0"
+versions.constraint_layout = "1.1.3"
+
+versions.dagger = "2.11"
+versions.dexmaker = "2.2.0"
+
+versions.espresso = "3.1.0"
+versions.eventbus = "3.0.0"
+
+versions.gson = "2.8.1"
+versions.glide = "4.8.0"
+versions.gradle_android_plugin_aspectjx = "2.0.0"
+
+versions.hamcrest = "1.3"
+
+versions.junit = "4.12"
+
+versions.kotlin = "1.3.31"
+
+versions.legacy = "1.0.0"
+versions.lifecycle = "2.1.0"
+versions.leakcanary = "1.5.4"
+versions.logutils_version = "1.5.1.1"
+
+versions.nineoldandroids = "2.4.0"
+
+versions.mockito = "2.7.19"
+versions.multidex = "2.0.1"
+versions.mockwebserver = "3.8.1"
+versions.mockito_all = "1.10.19"
+versions.material = "1.1.0-alpha10"
+
+versions.okhttp3 = "3.9.0"
+
+versions.paging = "2.1.0"
+
+versions.room = "2.2.1"
+versions.runner = "1.2.0"
+versions.rxjava2 = "2.1.5"
+versions.retrofit = "2.3.0"
+versions.rxkotlin2 = "2.2.0"
+versions.rx_android = "2.0.1"
+versions.recyclerview = "1.0.0"
+
+versions.spider_man = "1.1.1"
+
+versions.timber = "4.5.1"
+
+versions.universaltoast = "1.0.8"
+
 def deps = [:]
 
-def support = [:]
-support.annotations = "androidx.annotation:annotation:$versions.support"
-support.app_compat = "androidx.appcompat:appcompat:$versions.support"
-support.recyclerview = "androidx.recyclerview:recyclerview:$versions.support"
-support.cardview = "androidx.cardview:cardview:$versions.cardview"
-support.design = "com.google.android.material:material:$versions.material"
-support.v4 = "androidx.legacy:legacy-support-v4:$versions.support"
-support.core_utils = "androidx.legacy:legacy-support-core-utils:$versions.support"
-support.constraint_layout = "androidx.constraintlayout:constraintlayout:$versions.constraint_layout"
-deps.support = support
+
+def annotation = [:]
+annotation.annotation = "androidx.annotation:annotation:$versions.annotation"
+deps.annotation = annotation
+
+
+def appcompat = [:]
+appcompat.appcompat = "androidx.appcompat:appcompat:$versions.appcompat"
+deps.appcompat = appcompat
+
+
+def recyclerview = [:]
+recyclerview.recyclerview = "androidx.recyclerview:recyclerview:$versions.recyclerview"
+deps.recyclerview = recyclerview
+
+def cardview = [:]
+cardview.cardview = "androidx.cardview:cardview:$versions.cardview"
+deps.cardview = cardview
+
+def material = [:]
+material.material = "com.google.android.material:material:$versions.material"
+deps.material = material
+
+def legacy = [:]
+legacy.v4 = "androidx.legacy:legacy-support-v4:$versions.legacy"
+legacy.core_utils = "androidx.legacy:legacy-support-core-utils:$versions.legacy"
+deps.legacy = legacy
+
+def constraint_layout = [:]
+constraint_layout.constraint_layout = "androidx.constraintlayout:constraintlayout:$versions.constraint_layout"
+deps.constraint_layout = constraint_layout
 
 def room = [:]
-room.runtime = "android.arch.persistence.room:runtime:$versions.room"
-room.compiler = "android.arch.persistence.room:compiler:$versions.room"
-room.rxjava2 = "android.arch.persistence.room:rxjava2:$versions.room"
-room.testing = "android.arch.persistence.room:testing:$versions.room"
+room.runtime = "androidx.room:room-runtime:$versions.room"
+room.rxjava2 = "androidx.room:room-rxjava2:$versions.room"
+room.testing = "androidx.room:room-testing:$versions.room"
+room.compiler = "androidx.room:room-compiler:$versions.room"
 deps.room = room
 
 def lifecycle = [:]
-lifecycle.runtime = "android.arch.lifecycle:runtime:$versions.arch"
-lifecycle.extensions = "android.arch.lifecycle:extensions:$versions.arch"
-lifecycle.java8 = "android.arch.lifecycle:common-java8:$versions.arch"
-lifecycle.compiler = "android.arch.lifecycle:compiler:$versions.arch"
+lifecycle.compiler = "androidx.lifecycle:lifecycle-compiler:$versions.lifecycle"
+lifecycle.java8 = "androidx.lifecycle:lifecycle-common-java8:$versions.lifecycle"
+lifecycle.extensions = "androidx.lifecycle:lifecycle-extensions:$versions.lifecycle"
 deps.lifecycle = lifecycle
 
 def arch = [:]
-arch.testing = "android.arch.core:core-testing:$versions.arch"
-arch.paging = "android.arch.paging:runtime:$versions.paging"
+arch.runtime = "androidx.arch.core:core-runtime:$versions.arch"
+arch.testing = "androidx.arch.core:core-testing:$versions.arch"
 deps.arch = arch
+
+def paging = [:]
+arch.paging = "androidx.paging:paging-runtime:$versions.paging"
+deps.paging = paging
 
 def okhttp3 = [:]
 okhttp3.okhttp3 = "com.squareup.okhttp3:okhttp:$versions.okhttp3"
-okhttp3.okhttp3_logging_interceptor = "com.squareup.okhttp3:logging-interceptor:$versions.okhttp3"
 okhttp3.mock_web_server = "com.squareup.okhttp3:mockwebserver:$versions.mockwebserver"
+okhttp3.okhttp3_logging_interceptor = "com.squareup.okhttp3:logging-interceptor:$versions.okhttp3"
 deps.okhttp3 = okhttp3
 
 def butterknife = [:]
@@ -105,25 +148,21 @@ deps.retrofit = retrofit
 def dagger = [:]
 dagger.runtime = "com.google.dagger:dagger:$versions.dagger"
 dagger.android = "com.google.dagger:dagger-android:$versions.dagger"
-dagger.android_support = "com.google.dagger:dagger-android-support:$versions.dagger"
 dagger.compiler = "com.google.dagger:dagger-compiler:$versions.dagger"
+dagger.android_support = "com.google.dagger:dagger-android-support:$versions.dagger"
 dagger.android_support_compiler = "com.google.dagger:dagger-android-processor:$versions.dagger"
 deps.dagger = dagger
 
 def espresso = [:]
-espresso.core = "com.android.support.test.espresso:espresso-core:$versions.espresso"
-espresso.contrib = "com.android.support.test.espresso:espresso-contrib:$versions.espresso"
-espresso.intents = "com.android.support.test.espresso:espresso-intents:$versions.espresso"
+espresso.core = "androidx.test.espresso:espresso-core:$versions.espresso"
+espresso.contrib = "androidx.test.espresso:espresso-contrib:$versions.espresso"
+espresso.intents = "androidx.test.espresso:espresso-intents:$versions.espresso"
 deps.espresso = espresso
 
 def runner = [:]
-runner.runner = "com.android.support.test:runner:$versions.runner"
+runner.rules = "androidx.test:rules:$versions.runner"
+runner.runner = "androidx.test:runner:$versions.runner"
 deps.runner = runner
-
-def atsl = [:]
-atsl.runner = "com.android.support.test:runner:$versions.atsl_runner"
-atsl.rules = "com.android.support.test:rules:$versions.atsl_runner"
-deps.atsl = atsl
 
 def mockito = [:]
 mockito.core = "org.mockito:mockito-core:$versions.mockito"
@@ -131,14 +170,14 @@ mockito.all = "org.mockito:mockito-all:$versions.mockito_all"
 deps.mockito = mockito
 
 def kotlin = [:]
-kotlin.stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
 kotlin.test = "org.jetbrains.kotlin:kotlin-test-junit:$versions.kotlin"
+kotlin.stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
 deps.kotlin = kotlin
 
 def leakcanary = [:]
 leakcanary.debug = "com.squareup.leakcanary:leakcanary-android:$versions.leakcanary"
-leakcanary.release = "com.squareup.leakcanary:leakcanary-android-no-op:$versions.leakcanary"
 leakcanary.test = "com.squareup.leakcanary:leakcanary-android-no-op:$versions.leakcanary"
+leakcanary.release = "com.squareup.leakcanary:leakcanary-android-no-op:$versions.leakcanary"
 deps.leakcanary = leakcanary
 
 def spiderman = [:]
@@ -165,8 +204,8 @@ deps.junit = junit
 
 def rxjava2 = [:]
 rxjava2.rxjava2 = "io.reactivex.rxjava2:rxjava:$versions.rxjava2"
-rxjava2.rx_android = "io.reactivex.rxjava2:rxandroid:$versions.rx_android"
 rxjava2.rxkotlin2 = "io.reactivex.rxjava2:rxkotlin:$versions.rxkotlin2"
+rxjava2.rx_android = "io.reactivex.rxjava2:rxandroid:$versions.rx_android"
 deps.rxjava2 = rxjava2
 
 def logutils = [:]
@@ -202,7 +241,7 @@ aspectj.aspectjrt = "org.aspectj:aspectjrt:$versions.aspectjrt"
 deps.aspectj = aspectj
 
 def multidex = [:]
-multidex.multidex = "com.android.support:multidex:$versions.multidex"
+multidex.multidex = "androidx.multidex:multidex:$versions.multidex"
 deps.multidex = multidex
 
 def nineoldandroids = [:]
@@ -210,11 +249,10 @@ nineoldandroids.nineoldandroids = "com.nineoldandroids:library:$versions.nineold
 deps.nineoldandroids = nineoldandroids
 
 def plugin = [:]
-plugin.android_gradle_plugin = "com.android.tools.build:gradle:$versions.android_gradle_plugin"
 plugin.kotlin_gradle_plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
+plugin.android_gradle_plugin = "com.android.tools.build:gradle:$versions.android_gradle_plugin"
 plugin.gradle_android_plugin_aspectjx = "com.hujiang.aspectjx:gradle-android-plugin-aspectjx:$versions.gradle_android_plugin_aspectjx"
 deps.plugin = plugin
-
 
 
 def build_versions = [:]

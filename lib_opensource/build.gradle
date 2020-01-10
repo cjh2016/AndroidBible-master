@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion build_versions.target_sdk
@@ -11,7 +12,7 @@ android {
         versionCode build_versions.version_code
         versionName build_versions.version_name
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -36,15 +37,19 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    //support
-    api deps.support.app_compat
-    api deps.support.design
-    api(deps.support.constraint_layout) {
+    //appcompat
+    api deps.appcompat.appcompat
+
+    //constraint_layout
+    api(deps.constraint_layout.constraint_layout) {
         exclude group: "com.android.support"
     }
 
-    api deps.support.recyclerview
-    api deps.support.cardview
+    //recyclerview
+    api deps.recyclerview.recyclerview
+
+    //cardview
+    api deps.cardview.cardview
 
     //kotlin
     api deps.kotlin.stdlib
@@ -55,7 +60,6 @@ dependencies {
     api deps.retrofit.adapter_rxjava2
 
     //lifecycle
-    api deps.lifecycle.runtime
     api deps.lifecycle.extensions
     annotationProcessor deps.lifecycle.compiler
 
@@ -63,7 +67,6 @@ dependencies {
     api (deps.glide.glide) {
         exclude group: 'com.android.support'
     }
-
 
     //arouter
     api deps.arouter.runtime
