@@ -1,1 +1,1 @@
-include ':app', ':lib_opensource', ':lib_basissdk', ':lib_common', ':component_utils', ':component_viewpaper', ':component_videoplayer', ':component_fragment', ':component_textview'
+include ':app', ':lib_opensource', ':lib_basissdk', ':lib_common', ':component_utils', ':component_viewpaper', ':component_videoplayer', ':component_fragment', ':component_textview', ':component_materialdesign'

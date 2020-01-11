@@ -40,6 +40,9 @@ dependencies {
     //appcompat
     api deps.appcompat.appcompat
 
+    //material design
+    api deps.material.material
+
     //constraint_layout
     api(deps.constraint_layout.constraint_layout) {
         exclude group: "com.android.support"
