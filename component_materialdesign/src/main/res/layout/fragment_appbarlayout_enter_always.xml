@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <!--
+            要AppBarLayout的子View才能使用layout_scrollFlags属性
+
+            AppBarLayout的子View添加layout_scrollFlags属性的值是enterAlways时, 当ScrollView向下滑动时，
+            AppBarLayoutView的子直接向下滑动，而不管ScrollView是否在滑动。注意：要与scroll搭配使用，否者
+            是不能滑动的。
+
+            要配合scroll一起使用
+        -->
+        <androidx.appcompat.widget.Toolbar
+                android:id="@+id/appbar_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:title="AppbarLayout"
+                app:titleTextColor="@color/white"
+                app:layout_scrollFlags="scroll|enterAlways"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+
+    <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/large_text"/>
+    </androidx.core.widget.NestedScrollView>
+
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

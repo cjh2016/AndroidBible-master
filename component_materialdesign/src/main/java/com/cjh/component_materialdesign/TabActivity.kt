@@ -1,5 +1,6 @@
 package com.cjh.component_materialdesign
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -22,28 +23,35 @@ class TabActivity: AppCompatActivity() {
 
     private var TAG = TabActivity::class.java.simpleName
 
-    private var sTitle = arrayOf("ITEM FIRST","ITEM SECOND","ITEM THIRD")
+    private var sTitle = arrayOf("你好","ITEM SECOND","ITEM THIRD")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tab)
+    }
+
+    override fun onResume() {
+        super.onResume()
         initView()
+
     }
 
 
     private fun initView() {
         tabLayout?.apply {
 
+
+
             //创建Tab
-            addTab(newTab().setText(sTitle[0]))
-            addTab(newTab().setText(sTitle[1]))
-            addTab(newTab().setText(sTitle[2]))
+            this.addTab(this.newTab().setText(sTitle[0]).setIcon(R.mipmap.ic_launcher))
+            addTab(newTab().setText(sTitle[1]).setIcon(R.mipmap.ic_launcher))
+            addTab(newTab().setText(sTitle[2]).setIcon(R.mipmap.ic_launcher))
 
             //监听Tab切换
             addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
 
                 override fun onTabSelected(tab: TabLayout.Tab?) {
-                    Log.i(TAG,"onTabSelected: $tab.getText()")
+                    Log.i(TAG,"onTabSelected: ${tab?.text}")
                 }
 
                 override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -54,8 +62,8 @@ class TabActivity: AppCompatActivity() {
 
             })
 
-            //关联ViewPager
-            setupWithViewPager(view_pager)
+
+
 
             val fragments = ArrayList<Fragment>()
             fragments.add(FirstFragment())
@@ -81,10 +89,16 @@ class TabActivity: AppCompatActivity() {
                 }
 
             })
+
+            //关联ViewPager
+            setupWithViewPager(view_pager)
         }
+
 
         view_pager?.apply {
 
         }
     }
+
+
 }

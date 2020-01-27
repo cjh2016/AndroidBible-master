@@ -5,7 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import com.cjh.component_materialdesign.BaseFragment
 import com.cjh.component_materialdesign.R
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.fragment_tablayout_normal.*
@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.fragment_tablayout_normal.*
  * @date: 2020/1/11 12:14
  * @description:
  */
-class NormalTabLayoutFragment: Fragment() {
+class NormalTabLayoutFragment: BaseFragment() {
 
     private var TAG = NormalTabLayoutFragment::class.java.simpleName
 
@@ -48,6 +48,17 @@ class NormalTabLayoutFragment: Fragment() {
                 }
 
             })
+        }
+    }
+
+    companion object {
+        private var sInstance: BaseFragment? = null
+
+        fun newInstance(): NormalTabLayoutFragment? {
+            if (null == sInstance) {
+                sInstance = NormalTabLayoutFragment()
+            }
+            return sInstance as NormalTabLayoutFragment
         }
     }
 

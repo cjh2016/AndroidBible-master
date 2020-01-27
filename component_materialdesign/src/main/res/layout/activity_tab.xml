@@ -20,13 +20,18 @@
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/red"
-            app:tabTextColor="@color/black"
-            app:tabSelectedTextColor="@color/blue"
-            app:tabIndicatorColor="@color/yellow"
+            android:background="@color/white"
+
+            app:tabTextColor="@color/green"
+            app:tabSelectedTextColor="@color/red"
+            app:tabIndicatorColor="@color/red"
             app:tabIndicatorHeight="2dp"
             app:tabGravity="fill"
             app:tabMode="fixed">
+
+
+
+<!--                    -->
 
     </com.google.android.material.tabs.TabLayout>
 

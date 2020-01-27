@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <!--
+            要AppBarLayout的子View才能使用layout_scrollFlags属性
+
+            enterAlwaysCollapsed是对enterAlways的补充，当ScrollView向下滑动的时候，滑动View（也就是设置了
+            enterAlwaysCollapsed的View）下滑至折叠的高度，当ScrollView到达滑动范围的结束值的时候，滑动View
+            剩下的部分开始滑动。这个折叠的高度是通过View的minimum height（最小高度）指定的。
+
+            要配合scroll｜enterAlways 一起使用
+        -->
+        <androidx.appcompat.widget.Toolbar
+                android:id="@+id/appbar_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:minHeight="?attr/actionBarSize"
+                app:title="AppbarLayout"
+                app:titleTextColor="@color/white"
+                app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+
+    <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/large_text"/>
+    </androidx.core.widget.NestedScrollView>
+
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

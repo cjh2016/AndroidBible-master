@@ -11,6 +11,11 @@ import androidx.fragment.app.FragmentStatePagerAdapter
  */
 class MyFragmentAdapter(var fragmentManager: FragmentManager, var fragments: ArrayList<Fragment>): FragmentStatePagerAdapter(fragmentManager) {
 
+
+    override fun getPageTitle(position: Int): CharSequence? {
+        return "test"
+    }
+
     override fun getItem(position: Int): Fragment {
         return fragments[position]
     }

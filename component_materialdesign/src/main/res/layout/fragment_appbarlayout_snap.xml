@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <!--
+            要AppBarLayout的子View才能使用layout_scrollFlags属性
+
+            snap,意思是：在滚动结束后，如果view只是部分可见，它将滑动到最近的边界。比如，如果view的底部只有
+            25%可见，它将滚动离开屏幕，而如果底部有75%可见，它将滚动到完全显示。
+
+            要配合scroll一起使用
+        -->
+        <androidx.appcompat.widget.Toolbar
+                android:id="@+id/appbar_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:minHeight="?attr/actionBarSize"
+                app:title="AppbarLayout"
+                app:titleTextColor="@color/white"
+                app:layout_scrollFlags="scroll|snap"
+                android:gravity="bottom"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+
+    <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/large_text"/>
+    </androidx.core.widget.NestedScrollView>
+
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

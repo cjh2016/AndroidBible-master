@@ -1,9 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/fragment_container"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
-</FrameLayout>
+    <HorizontalScrollView
+
+            android:id="@+id/top_container"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/xml_tab_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="XML创建TabLayout"
+                    android:onClick="XmlTabLayout"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toLeftOf="@+id/normal_tab_layout"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/normal_tab_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Normal TabLayout示例"
+                    android:onClick="NormalTabLayout"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/xml_tab_layout"
+                    app:layout_constraintRight_toLeftOf="@+id/advanced_tab_layout"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/advanced_tab_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Advanced TabLayout示例"
+                    android:onClick="AdvancedTabLayout"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/normal_tab_layout"
+                    app:layout_constraintRight_toLeftOf="@+id/appbar_layout_scroll"/>
+
+
+            <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/appbar_layout_scroll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="AppBarLayout Scroll示例"
+                    android:onClick="AppBarLayoutScroll"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/advanced_tab_layout"
+                    app:layout_constraintRight_toLeftOf="@+id/appbar_layout_enter_always"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/appbar_layout_enter_always"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="AppBarLayout enterAlways示例"
+                    android:onClick="AppBarLayoutEnterAlways"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/appbar_layout_scroll"
+                    app:layout_constraintRight_toLeftOf="@+id/appbar_layout_enter_always_collapsed"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/appbar_layout_enter_always_collapsed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="AppBarLayout enterAlwaysCollapsed示例"
+                    android:onClick="AppBarLayoutEnterAlwaysCollapsed"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/appbar_layout_enter_always"
+                    app:layout_constraintRight_toLeftOf="@+id/appbar_layout_exit_until_collapsed"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/appbar_layout_exit_until_collapsed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="AppBarLayout exitUntilCollapsed示例"
+                    android:onClick="AppBarLayoutExitUntilCollapsed"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/appbar_layout_enter_always_collapsed"
+                    app:layout_constraintRight_toLeftOf="@+id/appbar_layout_snap"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/appbar_layout_snap"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="AppBarLayout snap示例"
+                    android:onClick="AppBarLayoutSnap"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/appbar_layout_exit_until_collapsed"
+                    app:layout_constraintRight_toLeftOf="@+id/appbar_collapsing_toolbar_layout"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/appbar_collapsing_toolbar_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="AppBarLayoutCollapsingToolbarLayout示例"
+                    android:onClick="AppBarLayoutCollapsingToolbarLayout"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/appbar_layout_snap"
+                    app:layout_constraintRight_toRightOf="parent"/>
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+
+
+    <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/top_container"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
