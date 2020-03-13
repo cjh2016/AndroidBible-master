@@ -115,4 +115,7 @@ dependencies {
     //nineoldandroids
     api deps.nineoldandroids.nineoldandroids
 
+    //universalimageloader
+    api deps.universalimageloader.universalimageloader
+
 }

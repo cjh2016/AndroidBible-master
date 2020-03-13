@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.cjh.component_materialdesign.appbarlayout.AppBarLayoutFragment
+import com.cjh.component_materialdesign.behavoir.CoverHeaderScrollBehavior
 import com.cjh.component_materialdesign.tablayout.AdvancedTabLayoutFragment
 import com.cjh.component_materialdesign.tablayout.NormalTabLayoutFragment
 import com.cjh.component_materialdesign.tablayout.XmlTabLayoutFragment
@@ -61,6 +62,14 @@ class MainActivity : AppCompatActivity() {
         val fragment = AppBarLayoutFragment()
         fragment?.arguments = bundle
         goFragment(fragment)
+    }
+
+    fun CoverHeaderScrollBehavior(view: View) {
+        BehaviorLayout(R.layout.fragment_custom_behavior)
+    }
+
+    private fun BehaviorLayout(layoutId: Int) {
+        AppBarLayout(layoutId)
     }
 
 

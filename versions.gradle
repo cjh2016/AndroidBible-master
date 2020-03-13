@@ -66,6 +66,7 @@ versions.spider_man = "1.1.1"
 versions.timber = "4.5.1"
 
 versions.universaltoast = "1.0.8"
+versions.universal_imageloader = "1.9.5"
 
 def deps = [:]
 
@@ -231,6 +232,10 @@ deps.avi = avi
 def universaltoast = [:]
 universaltoast.universaltoast = "com.github.bboylin:UniversalToast:$versions.universaltoast"
 deps.universaltoast = universaltoast
+
+def universalimageloader = [:]
+universalimageloader.universalimageloader = "com.nostra13.universalimageloader:universal-image-loader:$versions.universal_imageloader"
+deps.universalimageloader = universalimageloader
 
 def android_processes = [:]
 android_processes.android_processes = "com.jaredrummler:android-processes:$versions.android_processes"

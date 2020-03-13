@@ -111,6 +111,17 @@
                     android:onClick="AppBarLayoutCollapsingToolbarLayout"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintLeft_toRightOf="@id/appbar_layout_snap"
+                    app:layout_constraintRight_toLeftOf="@id/behavior_cover_header_scroll"/>
+
+
+            <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/behavior_cover_header_scroll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CoverHeaderScrollBehavior示例"
+                    android:onClick="CoverHeaderScrollBehavior"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/appbar_collapsing_toolbar_layout"
                     app:layout_constraintRight_toRightOf="parent"/>
 
         </LinearLayout>
