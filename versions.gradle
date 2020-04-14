@@ -12,7 +12,7 @@ versions.aspectjrt = "1.8.9"
 versions.annotation = "1.1.0"
 versions.arouter_version = "1.2.4"
 versions.android_processes = "1.1.1"
-versions.android_gradle_plugin = '3.5.3'
+versions.android_gradle_plugin = '3.6.1'
 versions.arouter_processor_version = "1.2.2"
 
 versions.butterknife = "8.8.1"
