@@ -14,8 +14,11 @@
     <!--<com.cjh.component_customview.path.PathView
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>-->
-    <com.cjh.component_customview.bezier.BezierXView
+    <!--<com.cjh.component_customview.bezier.BezierXView
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent" />-->
+    <com.cjh.component_customview.paint.PaintView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
