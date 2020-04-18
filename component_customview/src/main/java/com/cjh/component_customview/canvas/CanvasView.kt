@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.view.View
 import com.cjh.component_customview.R
 import com.cjh.component_customview.analyze.HelpDraw
+import com.cjh.component_customview.analyze.HelpPath
 import com.cjh.component_customview.analyze.Utils
 
 /**
@@ -20,10 +21,7 @@ class CanvasView @JvmOverloads constructor(context: Context, attrs: AttributeSet
     lateinit var mWinSize: Point
     lateinit var mCoo: Point
 
-
     lateinit var mRedPaint: Paint
-
-
 
     init {
         init()
@@ -53,13 +51,13 @@ class CanvasView @JvmOverloads constructor(context: Context, attrs: AttributeSet
         HelpDraw.draw(canvas, HelpDraw.getCoo(context, mCoo))
 
 
+
         //保存画布
         canvas.save()
         //设置画布原点为（250, 200）
         canvas.translate(250f, 200f)
 
-
-        //测试功能
+        //测试Canvas系列
 
         //测试drawPoint系列
         //drawPointX(canvas)
@@ -89,7 +87,18 @@ class CanvasView @JvmOverloads constructor(context: Context, attrs: AttributeSet
         //translateCanvas(canvas)
 
         //测试缩放画布
-        scaleCanvas(canvas)
+        //scaleCanvas(canvas)
+
+        //测试斜切画布
+        //skewCanvas(canvas)
+
+        //测试save,restore画布
+        //saveRestoreCanvas(canvas)
+
+        //裁剪画布
+        clipCanvas(canvas)
+
+
 
         //恢复画布
         canvas.restore()
@@ -282,9 +291,56 @@ class CanvasView @JvmOverloads constructor(context: Context, attrs: AttributeSet
 
         canvas.save()
         canvas.scale(2f,2f,100f,100f)
-        mRedPaint.color=Color.parseColor("#880FB5FD")
+        mRedPaint.color = Color.parseColor("#880FB5FD")
         stateTest(canvas)
         canvas.restore()
     }
+
+    /**
+     * 斜切画布
+     */
+    private fun skewCanvas(canvas: Canvas) {
+        stateTest(canvas)
+
+        canvas.save()
+        canvas.skew(1f, 0f)
+        mRedPaint.color = Color.parseColor("#880FB5FD")
+        stateTest(canvas)
+        canvas.restore()
+    }
+
+    /**
+     * 保存和合并图层
+     */
+    private fun saveRestoreCanvas(canvas: Canvas) {
+        mRedPaint.textSize = 25f
+        canvas.drawText(canvas.saveCount.toString(), 100f, 100f, mRedPaint)
+        canvas.save()
+        canvas.save()
+        canvas.drawText(canvas.saveCount.toString(), 150f, 150f, mRedPaint)
+        canvas.restore()
+        canvas.drawText(canvas.saveCount.toString(), 200f, 200f, mRedPaint)
+        canvas.restoreToCount(2)
+        canvas.drawText(canvas.saveCount.toString(), 250f, 250f, mRedPaint)
+        //canvas.restoreToCount(0)  //会报错，参数必须要大于0
+
+    }
+
+    /**
+     * 裁剪画布
+     */
+    private fun clipCanvas(canvas: Canvas) {
+        val rect = Rect(20, 100, 250, 300)
+
+        //内裁剪
+        //canvas.clipRect(rect)
+
+        //外裁剪
+        canvas.clipOutRect(rect)
+
+        canvas.drawRect(0f, 0f, 200f, 300f, mRedPaint)
+    }
+
+
 
 }
