@@ -6,6 +6,8 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
+
+
     <!--<com.cjh.component_customview.canvas.CanvasView
             android:id="@+id/canvas_view"
             android:layout_width="match_parent"
@@ -17,8 +19,48 @@
     <!--<com.cjh.component_customview.bezier.BezierXView
             android:layout_width="match_parent"
             android:layout_height="match_parent" />-->
-    <com.cjh.component_customview.paint.PaintView
+    <!--<com.cjh.component_customview.paint.PaintView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"/>-->
+
+    <!--<com.cjh.component_customview.clockview.TolyClockView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>-->
+
+    <!--<com.cjh.component_customview.progressbar.TolyProgressbar
+            android:id="@+id/tolyProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>-->
+
+    <com.cjh.component_customview.seekbar.TolySeekBar
+            android:id="@+id/tolySeekBar"
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:max="100"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:progress="20"
+            app:z_sb_bg_color="#ff0000"
+            app:z_sb_bg_height="10dp"
+
+            app:z_sb_on_color="#224ee3"
+            app:z_sb_on_height="15dp"
+
+            app:z_sb_text_color="#00ff00"
+            app:z_sb_text_offset="5dp"
+            app:z_sb_text_size="10dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatSeekBar
+            android:id="@+id/seekBar"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            style="@style/Widget.AppCompat.SeekBar"
+            android:layout_marginTop="30dp"
+            />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

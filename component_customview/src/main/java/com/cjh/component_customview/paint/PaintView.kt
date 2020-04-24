@@ -7,6 +7,7 @@ import android.graphics.Typeface.*
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
@@ -59,8 +60,6 @@ class PaintView @JvmOverloads constructor(
         mEffectPaint = Paint(mRedPaint)
 
         mTextPaint = TextPaint()
-
-
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -92,12 +91,9 @@ class PaintView @JvmOverloads constructor(
 
         //sumEffect(canvas)
 
-
         //drawLinearGradient(canvas)
 
-
         //drawMultiLinearGradient(canvas)
-
 
         //drawRadialGradient(canvas)
 
@@ -119,8 +115,54 @@ class PaintView @JvmOverloads constructor(
 
         //drawTypeface(canvas)
 
+        //drawFontMetrics(canvas)
+
+        //drawTextBounds(canvas)
+
+        drawShadowLayer(canvas)
+
+        canvas.restore()
+
+    }
+
+    /**
+     * 绘制阴影
+     */
+    private fun drawShadowLayer(canvas: Canvas) {
+
+        mRedPaint.apply {
+            setShadowLayer(50f, 20f, 20f, Color.parseColor("#EEF39729"))
+            textSize = 200f
+            strokeWidth = 10f
+            style = Paint.Style.FILL
+        }
+        canvas.drawText("Toly", 300f, 300f, mRedPaint)
+    }
+
+
+    /**
+     * 矩形文字区域
+     */
+    private fun drawTextBounds(canvas: Canvas) {
+
         drawFontMetrics(canvas)
 
+        canvas.save()
+        canvas.translate(100f, 200f)
+
+
+        val text = "I am Toly"
+        val textRect = Rect()
+        mTextPaint.getTextBounds(text, 0, text.length, textRect)
+        Log.e(TAG, textRect.toShortString())
+
+        //绘制矩形
+        val tempPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+        tempPaint.apply {
+            color = Color.parseColor("#66F4F628")
+            style = Paint.Style.FILL
+        }
+        canvas.drawRect(textRect, tempPaint)
 
         canvas.restore()
     }
@@ -129,12 +171,58 @@ class PaintView @JvmOverloads constructor(
      * 文字测量
      */
     private fun drawFontMetrics(canvas: Canvas) {
-
         canvas.save()
+        canvas.translate(100f, 200f)
+        mTextPaint.apply {
+            textSize = 100f
+            typeface = SERIF
+        }
 
+        canvas.drawText("I am Toly", 0f, 0f, mTextPaint)
+
+        val fm: Paint.FontMetrics = mTextPaint.fontMetrics
+
+        Log.e(TAG, "top: ${fm.top}")
+        Log.e(TAG, "ascent: ${fm.ascent}")
+        Log.e(TAG, "leading: ${fm.leading}")
+        Log.e(TAG, "descent: ${fm.descent}")
+        Log.e(TAG, "bottom: ${fm.bottom}")
+
+        val tempPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+        tempPaint.apply {
+            strokeWidth = 1f
+            color = Color.RED
+            style = Paint.Style.STROKE
+        }
+
+        canvas.drawLine(0f, fm.top, winWidth, fm.top, tempPaint)
+
+        tempPaint.apply {
+            color = Color.MAGENTA
+        }
+
+        canvas.drawLine(0f, fm.ascent, winWidth, fm.ascent, tempPaint)
+
+        tempPaint.apply {
+            color = Color.parseColor("#4C17F9")
+        }
+
+        canvas.drawLine(0f, fm.leading, winWidth, fm.leading, tempPaint)
+
+        tempPaint.apply {
+            color = Color.GREEN
+        }
+
+        canvas.drawLine(0f, fm.descent, winWidth, fm.descent, tempPaint)
+
+        tempPaint.apply {
+            color = Color.parseColor("#E74EDD")
+        }
+
+        canvas.drawLine(0f, fm.bottom, winWidth, fm.bottom, tempPaint)
 
         canvas.restore()
-
     }
 
     /**
@@ -171,14 +259,12 @@ class PaintView @JvmOverloads constructor(
         canvas.drawText("Hello I am Toly", 0f, 0f, mTextPaint)
 
         canvas.restore()
-
     }
 
     /**
      * 文字相关
      */
     private fun drawTextPaint(canvas: Canvas) {
-
         canvas.save()
         canvas.translate(200f, -100f)
         mTextPaint.typeface = Typeface.SANS_SERIF
@@ -201,11 +287,9 @@ class PaintView @JvmOverloads constructor(
         mTextPaint.typeface = Typeface.MONOSPACE
         mTextPaint.textAlign = Paint.Align.CENTER
         canvas.drawText("MONOSPACE", 0f, 0f, mTextPaint)
-        canvas.drawRect(0f, -100f, winWidth, 0f, tempPaint);
-
+        canvas.drawRect(0f, -100f, winWidth, 0f, tempPaint)
 
         canvas.restore()
-
     }
 
     /**
@@ -358,9 +442,7 @@ class PaintView @JvmOverloads constructor(
         canvas.drawBitmap(mainBitmap, null,
             RectF(0f, 0f, 200f, 200f), mRedPaint)
 
-
         canvas.restore()
-
     }
 
     /**
@@ -387,7 +469,6 @@ class PaintView @JvmOverloads constructor(
         mRedPaint.strokeWidth = 10f
         mRedPaint.style = Paint.Style.FILL_AND_STROKE
         canvas.drawText("张风捷特烈", 0f, 200f, mRedPaint)
-
     }
 
     /**
@@ -400,7 +481,6 @@ class PaintView @JvmOverloads constructor(
         mRedPaint.shader =
             SweepGradient(0f, 0f, colorStart, colorEnd)
         canvas.drawCircle(0f, 0f, 150f, mRedPaint)
-
 
         canvas.translate(400f, 0f)
         val colors = intArrayOf(
@@ -423,7 +503,6 @@ class PaintView @JvmOverloads constructor(
      * 多色多点径向渐变
      */
     private fun drawMultiRadialGradient(canvas: Canvas) {
-
         val colors = intArrayOf(
             parseColor("#F60C0C"),  //红
             parseColor("#F3B913"),  //橙
@@ -445,7 +524,6 @@ class PaintView @JvmOverloads constructor(
             Shader.TileMode.CLAMP
         )
         canvas.drawCircle(0f, 0f, 250f, mRedPaint)
-
     }
 
     /**
@@ -468,7 +546,6 @@ class PaintView @JvmOverloads constructor(
         mRedPaint.shader = RadialGradient(0f, 0f, 50f,
             colorStart, colorEnd, Shader.TileMode.REPEAT)
         canvas.drawCircle(0f, 0f, 150f, mRedPaint)
-
     }
 
     /**
@@ -494,7 +571,6 @@ class PaintView @JvmOverloads constructor(
         mRedPaint.shader = LinearGradient(-300f, 0f, 300f, 0f, colors, pos,
             Shader.TileMode.CLAMP)
         canvas.drawRect(-400f, -200f, 400f, -100f, mRedPaint)
-
     }
 
     /**
@@ -529,7 +605,6 @@ class PaintView @JvmOverloads constructor(
         canvas.drawRect(-400f, -200f, 400f, -100f, mRedPaint)
 
         canvas.restore()
-
     }
 
     /**
@@ -670,8 +745,6 @@ class PaintView @JvmOverloads constructor(
         helpPath.lineTo(900f, 300f)
         helpPath.lineTo(1000f, 450f)
         canvas.drawPath(helpPath, tempPaint)
-
-
     }
 
     /**
@@ -717,6 +790,10 @@ class PaintView @JvmOverloads constructor(
 
         }
         return super.onTouchEvent(event)
+    }
+
+    companion object {
+        val TAG = PaintView::class.java.simpleName
     }
 
 
