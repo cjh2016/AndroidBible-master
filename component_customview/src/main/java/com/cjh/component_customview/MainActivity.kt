@@ -21,7 +21,9 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                tolySeekBar.progress = progress
+                //tolySeekBar.progress = progress
+
+
 
             }
 

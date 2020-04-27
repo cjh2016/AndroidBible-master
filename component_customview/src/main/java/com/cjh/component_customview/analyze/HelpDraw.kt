@@ -284,5 +284,18 @@ object HelpDraw {
 
     }
 
+    /**
+     * 绘制坐标系，包括网格
+     * @param context
+     * @param canvas
+     * @param origin
+     */
+    fun drawCoordinates(context: Context, canvas: Canvas, origin: Point) {
+        //画网格
+        draw(canvas, getGrid(context))
+        //画坐标系
+        draw(canvas, getCoo(context, origin))
+    }
+
 
 }
