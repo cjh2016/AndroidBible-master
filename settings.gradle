@@ -1,2 +1,3 @@
 include ':app', ':lib_opensource', ':lib_basissdk', ':lib_common', ':component_utils', ':component_viewpaper', ':component_videoplayer', ':component_fragment', ':component_textview', ':component_materialdesign', ':component_nestedscroll', ':component_ipc_service'
 include ':component_customview'
+include ':component_xfermode'

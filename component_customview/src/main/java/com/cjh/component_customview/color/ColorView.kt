@@ -136,11 +136,11 @@ class ColorView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
 
             mMainPaint.xfermode = null
 
-            //目标图象 (圆形)
+            //目标图象 (圆形)  1. 先画目标图像
             canvas.drawBitmap(dst, 200f * line, 200f * row, mMainPaint)
-            //设置对源的叠合模式
+            //设置对源的叠合模式  2. 设置混合的模式
             mMainPaint.xfermode = mModes[i]
-            //源图像 (矩形)
+            //源图像 (矩形)   3. 在画源图像
             canvas.drawBitmap(src, 50 + 200f * line, 50 + 200f * row, mMainPaint)
 
             //辅助信息
