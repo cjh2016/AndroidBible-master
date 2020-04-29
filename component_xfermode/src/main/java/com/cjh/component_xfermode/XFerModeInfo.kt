@@ -8,6 +8,6 @@ import com.cjh.component_xfermode.bean.XFerModeBean
  * @description:
  */
 interface XFerModeInfo {
-    fun getSelXFerModeBean(): XFerModeBean
+    fun getSelXFerModeBean(): XFerModeBean?
 
 }

@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "com.cjh.component_xfermode"
-        minSdkVersion 15
+        minSdkVersion build_versions.min_sdk
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"

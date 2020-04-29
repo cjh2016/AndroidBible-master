@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.item_xfermode.view.*
  */
 class XFerModeAdapter(context: Context, data: List<XFerModeBean>) : RecyclerView.Adapter<XFerModeAdapter.ViewHolder>() {
 
-    private var listener: XFerModeListener? = null
+    var listener: XFerModeListener? = null
     private lateinit var mInflater: LayoutInflater
     private lateinit var mData: List<XFerModeBean>
 

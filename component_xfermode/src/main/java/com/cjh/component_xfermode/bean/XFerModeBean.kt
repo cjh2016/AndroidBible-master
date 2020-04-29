@@ -1,6 +1,8 @@
 package com.cjh.component_xfermode.bean
 
+import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 
 /**
  * @author: caijianhui
@@ -8,12 +10,13 @@ import android.graphics.Bitmap
  * @description:
  */
 data class XFerModeBean(
-    val name: String,
-    val isSelect: Boolean,
-    val dstBitmap: Bitmap,
-    val srcBitmap: Bitmap,
-    val dst: Int,
-    val src: Int
+    var context: Context,
+    var name: String,
+    var isSelect: Boolean,
+    var dst: Int,
+    var src: Int,
+    var dstBitmap: Bitmap = BitmapFactory.decodeResource(context.resources, dst),
+    var srcBitmap: Bitmap = BitmapFactory.decodeResource(context.resources, src)
 ) {
 
     fun recycle() {
