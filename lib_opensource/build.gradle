@@ -118,4 +118,7 @@ dependencies {
     //universalimageloader
     api deps.universalimageloader.universalimageloader
 
+    //pinyin4j
+    api deps.pinyin4j.pinyin4j
+
 }

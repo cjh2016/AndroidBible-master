@@ -26,7 +26,9 @@ versions.dexmaker = "2.2.0"
 versions.espresso = "3.1.0"
 versions.eventbus = "3.0.0"
 
-versions.gson = "2.8.1"
+versions.fileprovider = ""
+
+versions.gson = "2.8.6"
 versions.glide = "4.8.0"
 versions.gradle_android_plugin_aspectjx = "2.0.0"
 
@@ -52,6 +54,7 @@ versions.material = "1.1.0-alpha10"
 versions.okhttp3 = "3.9.0"
 
 versions.paging = "2.1.0"
+versions.pinyin4j = "2.5.0"
 
 versions.room = "2.2.1"
 versions.runner = "1.2.0"
@@ -123,6 +126,10 @@ deps.arch = arch
 def paging = [:]
 arch.paging = "androidx.paging:paging-runtime:$versions.paging"
 deps.paging = paging
+
+def pinyin4j = [:]
+pinyin4j.pinyin4j = "com.github.open-android:pinyin4j:$versions.pinyin4j"
+deps.pinyin4j = pinyin4j
 
 def okhttp3 = [:]
 okhttp3.okhttp3 = "com.squareup.okhttp3:okhttp:$versions.okhttp3"
