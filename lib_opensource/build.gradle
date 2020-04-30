@@ -121,4 +121,7 @@ dependencies {
     //pinyin4j
     api deps.pinyin4j.pinyin4j
 
+    //gson
+    api deps.gson.gson
+
 }

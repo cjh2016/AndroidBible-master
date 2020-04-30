@@ -19,6 +19,7 @@ import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
@@ -42,6 +43,7 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.FloatRange;
 import androidx.annotation.IntRange;
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
 import com.cjh.lib_basissdk.util.constant.MemoryConstants;
@@ -363,6 +365,38 @@ public final class ImageUtils {
         options.inJustDecodeBounds = false;
         return BitmapFactory.decodeFileDescriptor(fd, null, options);
     }
+
+
+	/**
+	 * Return the bitmap with the specified color.
+	 *
+	 * @param src   The source of bitmap.
+	 * @param color The color.
+	 * @return the bitmap with the specified color
+	 */
+	public static Bitmap drawColor(@NonNull final Bitmap src, @ColorInt final int color) {
+		return drawColor(src, color, false);
+	}
+
+	/**
+	 * Return the bitmap with the specified color.
+	 *
+	 * @param src     The source of bitmap.
+	 * @param color   The color.
+	 * @param recycle True to recycle the source of bitmap, false otherwise.
+	 * @return the bitmap with the specified color
+	 */
+	public static Bitmap drawColor(@NonNull final Bitmap src,
+								   @ColorInt final int color,
+								   final boolean recycle) {
+		if (isEmptyBitmap(src)) return null;
+		Bitmap ret = recycle ? src : src.copy(src.getConfig(), true);
+		Canvas canvas = new Canvas(ret);
+		canvas.drawColor(color, PorterDuff.Mode.DARKEN);
+		return ret;
+	}
+
+
     
     /**
      * 缩放图片
@@ -392,7 +426,7 @@ public final class ImageUtils {
     	
     	if (isEmptyBitmap(src)) return null;
     	Bitmap ret = Bitmap.createScaledBitmap(src, newWidth, newHeight, true);
-    	if (recycle && !src.isRecycled()) src.recycle();
+		if (recycle && !src.isRecycled() && ret != src) src.recycle();
     	return ret;
     }
     
@@ -425,7 +459,7 @@ public final class ImageUtils {
     	Matrix matrix = new Matrix();
     	matrix.setScale(scaleWidth, scaleHeight);
     	Bitmap ret = Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), matrix, true);
-    	if (recycle && !src.isRecycled()) src.recycle();
+		if (recycle && !src.isRecycled() && ret != src) src.recycle();
     	return ret;
     }
     
@@ -466,7 +500,7 @@ public final class ImageUtils {
                               final boolean recycle) {
     	if (isEmptyBitmap(src)) return null;
     	Bitmap ret = Bitmap.createBitmap(src, x, y, width, height);
-    	if (recycle && !src.isRecycled()) src.recycle();
+		if (recycle && !src.isRecycled() && ret != src) src.recycle();
         return ret;
     }
     
@@ -541,7 +575,7 @@ public final class ImageUtils {
         Matrix matrix = new Matrix();
         matrix.setSkew(kx, ky, px, py);
         Bitmap ret = Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), matrix, true);
-        if (recycle && !src.isRecycled()) src.recycle();
+		if (recycle && !src.isRecycled() && ret != src) src.recycle();
         return ret;
     }
     
@@ -581,7 +615,7 @@ public final class ImageUtils {
         Matrix matrix = new Matrix();
         matrix.setRotate(degrees, px, py);
         Bitmap ret = Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), matrix, true);
-        if (recycle && !src.isRecycled()) src.recycle();
+		if (recycle && !src.isRecycled() && ret != src) src.recycle();
         return ret;
     }
     
@@ -592,31 +626,26 @@ public final class ImageUtils {
      * @return 旋转角度
      */
     public static int getRotateDegree(final String filePath) {
-    	int degree = 0;
-    	try {
+		try {
 			ExifInterface exifInterface = new ExifInterface(filePath);
 			int orientation = exifInterface.getAttributeInt(
-					ExifInterface.TAG_ORIENTATION, 
-					ExifInterface.ORIENTATION_NORMAL);
-			
+					ExifInterface.TAG_ORIENTATION,
+					ExifInterface.ORIENTATION_NORMAL
+			);
 			switch (orientation) {
 				case ExifInterface.ORIENTATION_ROTATE_90:
-					degree = 90;
-					break;
+					return 90;
 				case ExifInterface.ORIENTATION_ROTATE_180:
-					degree = 180;
-					break;
+					return 180;
 				case ExifInterface.ORIENTATION_ROTATE_270:
-					degree = 270;
-					break;
+					return 270;
 				default:
-					break;
+					return 0;
 			}
-			
 		} catch (IOException e) {
 			e.printStackTrace();
+			return -1;
 		}
-    	return degree;
     }
     
     /**
@@ -696,7 +725,7 @@ public final class ImageUtils {
         	float radius = center - borderSize / 2f;
         	canvas.drawCircle(width / 2f, height / 2f, radius, paint);
         }
-        if (recycle && !src.isRecycled()) src.recycle();
+		if (recycle && !src.isRecycled() && ret != src) src.recycle();
         return ret;
     }
     
@@ -784,7 +813,7 @@ public final class ImageUtils {
     		paint.setStrokeCap(Paint.Cap.ROUND);
     		canvas.drawRoundRect(rectF, radius, radius, paint);
     	}
-    	if (recycle && !src.isRecycled()) src.recycle();
+		if (recycle && !src.isRecycled() && ret != src) src.recycle();
         return ret;
     }
     
@@ -942,7 +971,7 @@ public final class ImageUtils {
         paint.setXfermode(new PorterDuffXfermode(android.graphics.PorterDuff.Mode.DST_IN));
         canvas.drawRect(0, srcHeight + REFLECTION_GAP, srcWidth, ret.getHeight(), paint);
         if (!reflectionBitmap.isRecycled()) reflectionBitmap.recycle();
-        if (recycle && !src.isRecycled()) src.recycle();
+		if (recycle && !src.isRecycled() && ret != src) src.recycle();
         return ret;
     }
     
@@ -995,7 +1024,7 @@ public final class ImageUtils {
         Rect bounds = new Rect();
         paint.getTextBounds(content, 0, content.length(), bounds);
         canvas.drawText(content, x, y + textSize, paint);
-        if (recycle && !src.isRecycled()) src.recycle();
+		if (recycle && !src.isRecycled() && ret != src) src.recycle();
         return ret;
     }
     
@@ -1042,7 +1071,7 @@ public final class ImageUtils {
             paint.setAlpha(alpha);
             canvas.drawBitmap(watermark, x, y, paint);
         }
-        if (recycle && !src.isRecycled()) src.recycle();
+		if (recycle && !src.isRecycled() && ret != src) src.recycle();
         return ret;
     }
     
@@ -1067,7 +1096,7 @@ public final class ImageUtils {
     	
     	if (isEmptyBitmap(src)) return null;
     	Bitmap ret = src.extractAlpha();
-    	if (recycle && !src.isRecycled()) src.recycle();
+		if (recycle && !src.isRecycled() && ret != src) src.recycle();
         return ret;
     }
     
@@ -1100,7 +1129,7 @@ public final class ImageUtils {
         ColorMatrixColorFilter colorMatrixColorFilter = new ColorMatrixColorFilter(colorMatrix);
         paint.setColorFilter(colorMatrixColorFilter);
         canvas.drawBitmap(src, 0, 0, paint);
-        if (recycle && !src.isRecycled()) src.recycle();
+		if (recycle && !src.isRecycled() && ret != src) src.recycle();
         return ret;
     }
     
@@ -1118,6 +1147,28 @@ public final class ImageUtils {
                                   @FloatRange(from = 0, to = 25, fromInclusive = false) final float radius) {
         return fastBlur(src, scale, radius, false);
     }
+
+
+	/**
+	 * Return the blur bitmap fast.
+	 * <p>zoom out, blur, zoom in</p>
+	 *
+	 * @param src    The source of bitmap.
+	 * @param scale  The scale(0...1).
+	 * @param radius The radius(0...25).
+	 * @return the blur bitmap
+	 */
+	public static Bitmap fastBlur(final Bitmap src,
+								  @FloatRange(
+										  from = 0, to = 1, fromInclusive = false
+								  ) final float scale,
+								  @FloatRange(
+										  from = 0, to = 25, fromInclusive = false
+								  ) final float radius,
+								  final boolean recycle) {
+		return fastBlur(src, scale, radius, recycle, false);
+	}
+
     
     /**
      * 快速模糊图片
@@ -1129,33 +1180,42 @@ public final class ImageUtils {
      * @param recycle 是否回收
      * @return 模糊后的图片
      */
-    public static Bitmap fastBlur(final Bitmap src,
-                                  @FloatRange(from = 0, to = 1, fromInclusive = false) final float scale,
-                                  @FloatRange(from = 0, to = 25, fromInclusive = false) final float radius,
-                                  final boolean recycle) {
-        if (isEmptyBitmap(src)) return null;
-        int width = src.getWidth();
-        int height = src.getHeight();
-        Matrix matrix = new Matrix();
-        matrix.setScale(scale, scale);
-        Bitmap scaleBitmap = Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), matrix, true);
-        Paint paint = new Paint(Paint.FILTER_BITMAP_FLAG | Paint.ANTI_ALIAS_FLAG);
-        Canvas canvas = new Canvas();
-        PorterDuffColorFilter filter = new PorterDuffColorFilter(
-                Color.TRANSPARENT, android.graphics.PorterDuff.Mode.SRC_ATOP);
-        paint.setColorFilter(filter);
-        canvas.scale(scale, scale);
-        canvas.drawBitmap(scaleBitmap, 0, 0, paint);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            scaleBitmap = renderScriptBlur(scaleBitmap, radius, recycle);
-        } else {
-            scaleBitmap = stackBlur(scaleBitmap, (int) radius, recycle);
-        }
-        if (scale == 1) return scaleBitmap;
-        Bitmap ret = Bitmap.createScaledBitmap(scaleBitmap, width, height, true);
-        if (scaleBitmap != null && !scaleBitmap.isRecycled()) scaleBitmap.recycle();
-        if (recycle && !src.isRecycled()) src.recycle();
-        return ret;
+	public static Bitmap fastBlur(final Bitmap src,
+								  @FloatRange(
+										  from = 0, to = 1, fromInclusive = false
+								  ) final float scale,
+								  @FloatRange(
+										  from = 0, to = 25, fromInclusive = false
+								  ) final float radius,
+								  final boolean recycle,
+								  final boolean isReturnScale) {
+		if (isEmptyBitmap(src)) return null;
+		int width = src.getWidth();
+		int height = src.getHeight();
+		Matrix matrix = new Matrix();
+		matrix.setScale(scale, scale);
+		Bitmap scaleBitmap =
+				Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), matrix, true);
+		Paint paint = new Paint(Paint.FILTER_BITMAP_FLAG | Paint.ANTI_ALIAS_FLAG);
+		Canvas canvas = new Canvas();
+		PorterDuffColorFilter filter = new PorterDuffColorFilter(
+				Color.TRANSPARENT, PorterDuff.Mode.SRC_ATOP);
+		paint.setColorFilter(filter);
+		canvas.scale(scale, scale);
+		canvas.drawBitmap(scaleBitmap, 0, 0, paint);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+			scaleBitmap = renderScriptBlur(scaleBitmap, radius, recycle);
+		} else {
+			scaleBitmap = stackBlur(scaleBitmap, (int) radius, recycle);
+		}
+		if (scale == 1 || isReturnScale) {
+			if (recycle && !src.isRecycled() && scaleBitmap != src) src.recycle();
+			return scaleBitmap;
+		}
+		Bitmap ret = Bitmap.createScaledBitmap(scaleBitmap, width, height, true);
+		if (!scaleBitmap.isRecycled()) scaleBitmap.recycle();
+		if (recycle && !src.isRecycled() && ret != src) src.recycle();
+		return ret;
     }
 
     /**
@@ -1489,7 +1549,7 @@ public final class ImageUtils {
     	try {
     		os = new BufferedOutputStream(new FileOutputStream(file));
         	ret = src.compress(format, 100, os);
-        	if (recycle && !src.isRecycled()) src.recycle();
+			if (recycle && !src.isRecycled()) src.recycle();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -1505,7 +1565,10 @@ public final class ImageUtils {
      * @return {@code true}: 是<br>{@code false}: 否
      */
     public static boolean isImage(final File file) {
-        return file != null && isImage(file.getPath());
+		if (file == null || !file.exists()) {
+			return false;
+		}
+		return isImage(file.getPath());
     }
     
     
@@ -1515,14 +1578,32 @@ public final class ImageUtils {
      * @param filePath 　文件路径
      * @return {@code true}: 是<br>{@code false}: 否
      */
-    public static boolean isImage(final String filePath) {
+    public static boolean isImageBySuffix(final String filePath) {
         String path = filePath.toUpperCase();
         return path.endsWith(".PNG") || path.endsWith(".JPG")
                 || path.endsWith(".JPEG") || path.endsWith(".BMP")
                 || path.endsWith(".GIF");
     }
-    
-    /**
+
+	/**
+	 * Return whether it is a image according to the file name.
+	 *
+	 * @param filePath The path of file.
+	 * @return {@code true}: yes<br>{@code false}: no
+	 */
+	public static boolean isImage(final String filePath) {
+		BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inJustDecodeBounds = true;
+		try {
+			Bitmap bitmap = BitmapFactory.decodeFile(filePath, options);
+			return options.outWidth != -1 && options.outHeight != -1;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+
+	/**
      * 获取图片类型
      *
      * @param filePath 文件路径
@@ -1539,18 +1620,31 @@ public final class ImageUtils {
      * @return 图片类型
      */
     public static String getImageType(final File file) {
-        if (file == null) return null;
-        InputStream is = null;
-        try {
-            is = new FileInputStream(file);
-            return getImageType(is);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        } finally {
-            CloseUtils.closeIO(is);
-        }
+		if (file == null) return "";
+		InputStream is = null;
+		try {
+			is = new FileInputStream(file);
+			String type = getImageType(is);
+			if (type != null) {
+				return type;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			CloseUtils.closeIO(is);
+		}
+		return getFileExtension(file.getAbsolutePath()).toUpperCase();
     }
+
+
+	private static String getFileExtension(final String filePath) {
+		if (isSpace(filePath)) return filePath;
+		int lastPoi = filePath.lastIndexOf('.');
+		int lastSep = filePath.lastIndexOf(File.separator);
+		if (lastPoi == -1 || lastSep >= lastPoi) return "";
+		return filePath.substring(lastPoi + 1);
+	}
+
     
     /**
      * 流获取图片类型
@@ -1855,6 +1949,32 @@ public final class ImageUtils {
         if (recycle && !src.isRecycled()) src.recycle();
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
     }
+
+
+	/**
+	 * Return the size of bitmap.
+	 *
+	 * @param filePath The path of file.
+	 * @return the size of bitmap
+	 */
+	public static int[] getSize(String filePath) {
+		return getSize(getFileByPath(filePath));
+	}
+
+
+	/**
+	 * Return the size of bitmap.
+	 *
+	 * @param file The file.
+	 * @return the size of bitmap
+	 */
+	public static int[] getSize(File file) {
+		if (file == null) return new int[]{0, 0};
+		BitmapFactory.Options opts = new BitmapFactory.Options();
+		opts.inJustDecodeBounds = true;
+		BitmapFactory.decodeFile(file.getAbsolutePath(), opts);
+		return new int[]{opts.outWidth, opts.outHeight};
+	}
     
     
     private static File getFileByPath(final String filePath) {
