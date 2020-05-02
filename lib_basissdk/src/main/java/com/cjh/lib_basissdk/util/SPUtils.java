@@ -12,47 +12,79 @@ import androidx.collection.SimpleArrayMap;
 /**
  * SP 相关工具类
  */
+@SuppressLint("ApplySharedPref")
 public final class SPUtils {
 
-	private static SimpleArrayMap<String, SPUtils> SP_UTILS_MAP = new SimpleArrayMap<String, SPUtils>();
-	private SharedPreferences sp;
-	
-	/**
-     * 获取 SP 实例
+    private static final Map<String, SPUtils> SP_UTILS_MAP = new HashMap<>();
+
+    private SharedPreferences sp;
+
+    /**
+     * Return the single {@link SPUtils} instance
      *
      * @return {@link SPUtils}
      */
     public static SPUtils getInstance() {
-        return getInstance("");
+        return getInstance("", Context.MODE_PRIVATE);
     }
-	
-	/**
-     * 获取 SP 实例
+
+    /**
+     * Return the single {@link SPUtils} instance
      *
-     * @param spName sp 名
-     * @return {@link SPUtils}
+     * @param mode Operating mode.
+     * @return the single {@link SPUtils} instance
      */
-	public static SPUtils getInstance(String spName) {
-		if (isSpace(spName)) spName = "spUtils";
-		SPUtils spUtils = SP_UTILS_MAP.get(spName);
-		if (spUtils == null) {
-            spUtils = new SPUtils(spName);
-            SP_UTILS_MAP.put(spName, spUtils);
+    public static SPUtils getInstance(final int mode) {
+        return getInstance("", mode);
+    }
+
+    /**
+     * Return the single {@link SPUtils} instance
+     *
+     * @param spName The name of sp.
+     * @return the single {@link SPUtils} instance
+     */
+    public static SPUtils getInstance(String spName) {
+        return getInstance(spName, Context.MODE_PRIVATE);
+    }
+
+    /**
+     * Return the single {@link SPUtils} instance
+     *
+     * @param spName The name of sp.
+     * @param mode   Operating mode.
+     * @return the single {@link SPUtils} instance
+     */
+    public static SPUtils getInstance(String spName, final int mode) {
+        if (isSpace(spName)) spName = "spUtils";
+        SPUtils spUtils = SP_UTILS_MAP.get(spName);
+        if (spUtils == null) {
+            synchronized (SPUtils.class) {
+                spUtils = SP_UTILS_MAP.get(spName);
+                if (spUtils == null) {
+                    spUtils = new SPUtils(spName, mode);
+                    SP_UTILS_MAP.put(spName, spUtils);
+                }
+            }
         }
         return spUtils;
-	}
-	
-	private SPUtils(final String spName) {
-		sp = Utils.getApp().getSharedPreferences(spName, Context.MODE_PRIVATE);
-	}
-	
-	/**
-     * SP 中写入 String
+    }
+
+    private SPUtils(final String spName) {
+        sp = Utils.getApp().getSharedPreferences(spName, Context.MODE_PRIVATE);
+    }
+
+    private SPUtils(final String spName, final int mode) {
+        sp = Utils.getApp().getSharedPreferences(spName, mode);
+    }
+
+    /**
+     * Put the string value in sp.
      *
      * @param key   键
      * @param value 值
      */
-    public void put(@NonNull final String key, @NonNull final String value) {
+    public void put(@NonNull final String key, final String value) {
         put(key, value, false);
     }
 
@@ -64,7 +96,7 @@ public final class SPUtils {
      * @param isCommit {@code true}: {@link SharedPreferences.Editor#commit()}<br>
      *                 {@code false}: {@link SharedPreferences.Editor#apply()}
      */
-    public void put(@NonNull final String key, @NonNull final String value, final boolean isCommit) {
+    public void put(@NonNull final String key, final String value, final boolean isCommit) {
         if (isCommit) {
             sp.edit().putString(key, value).commit();
         } else {
@@ -89,7 +121,7 @@ public final class SPUtils {
      * @param defaultValue 默认值
      * @return 存在返回对应值，不存在返回默认值{@code defaultValue}
      */
-    public String getString(@NonNull final String key, @NonNull final String defaultValue) {
+    public String getString(@NonNull final String key, final String defaultValue) {
         return sp.getString(key, defaultValue);
     }
 
@@ -287,8 +319,8 @@ public final class SPUtils {
      * @param key    键
      * @param values 值
      */
-    public void put(@NonNull final String key, @NonNull final Set<String> values) {
-        put(key, values, false);
+    public void put(@NonNull final String key, final Set<String> value) {
+        put(key, value, false);
     }
 
     /**
@@ -299,11 +331,13 @@ public final class SPUtils {
      * @param isCommit {@code true}: {@link SharedPreferences.Editor#commit()}<br>
      *                 {@code false}: {@link SharedPreferences.Editor#apply()}
      */
-    public void put(@NonNull final String key, @NonNull final Set<String> values, final boolean isCommit) {
+    public void put(@NonNull final String key,
+                    final Set<String> value,
+                    final boolean isCommit) {
         if (isCommit) {
-            sp.edit().putStringSet(key, values).commit();
+            sp.edit().putStringSet(key, value).commit();
         } else {
-            sp.edit().putStringSet(key, values).apply();
+            sp.edit().putStringSet(key, value).apply();
         }
     }
 
@@ -324,7 +358,8 @@ public final class SPUtils {
      * @param defaultValue 默认值
      * @return 存在返回对应值，不存在返回默认值{@code defaultValue}
      */
-    public Set<String> getStringSet(@NonNull final String key, @NonNull final Set<String> defaultValue) {
+    public Set<String> getStringSet(@NonNull final String key,
+                                    final Set<String> defaultValue) {
         return sp.getStringSet(key, defaultValue);
     }
     

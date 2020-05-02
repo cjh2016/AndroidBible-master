@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -16,6 +17,7 @@ import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 import android.R.integer;
+import android.util.Log;
 
 /**
  * 压缩相关工具类
@@ -36,14 +38,101 @@ public final class ZipUtils {
      * @return {@code true}: 压缩成功<br>{@code false}: 压缩失败
      * @throws IOException IO 错误时抛出
      */
-	public static boolean zipFile(final String resFilePath,
-								  final String zipFilePath) 
-	        throws IOException {
-			return zipFile(resFilePath, zipFilePath, null);
-	}
+    public static boolean zipFiles(final Collection<String> srcFiles,
+                                   final String zipFilePath)
+            throws IOException {
+        return zipFiles(srcFiles, zipFilePath, null);
+    }
+
+    /**
+     * Zip the files.
+     *
+     * @param srcFilePaths The paths of source files.
+     * @param zipFilePath  The path of ZIP file.
+     * @param comment      The comment.
+     * @return {@code true}: success<br>{@code false}: fail
+     * @throws IOException if an I/O error has occurred
+     */
+    public static boolean zipFiles(final Collection<String> srcFilePaths,
+                                   final String zipFilePath,
+                                   final String comment)
+            throws IOException {
+        if (srcFilePaths == null || zipFilePath == null) return false;
+        ZipOutputStream zos = null;
+        try {
+            zos = new ZipOutputStream(new FileOutputStream(zipFilePath));
+            for (String srcFile : srcFilePaths) {
+                if (!zipFile(UtilsBridge.getFileByPath(srcFile), "", zos, comment)) return false;
+            }
+            return true;
+        } finally {
+            if (zos != null) {
+                zos.finish();
+                zos.close();
+            }
+        }
+    }
+
+    /**
+     * Zip the files.
+     *
+     * @param srcFiles The source of files.
+     * @param zipFile  The ZIP file.
+     * @return {@code true}: success<br>{@code false}: fail
+     * @throws IOException if an I/O error has occurred
+     */
+    public static boolean zipFiles(final Collection<File> srcFiles, final File zipFile)
+            throws IOException {
+        return zipFiles(srcFiles, zipFile, null);
+    }
+
+    /**
+     * Zip the files.
+     *
+     * @param srcFiles The source of files.
+     * @param zipFile  The ZIP file.
+     * @param comment  The comment.
+     * @return {@code true}: success<br>{@code false}: fail
+     * @throws IOException if an I/O error has occurred
+     */
+    public static boolean zipFiles(final Collection<File> srcFiles,
+                                   final File zipFile,
+                                   final String comment)
+            throws IOException {
+        if (srcFiles == null || zipFile == null) return false;
+        ZipOutputStream zos = null;
+        try {
+            zos = new ZipOutputStream(new FileOutputStream(zipFile));
+            for (File srcFile : srcFiles) {
+                if (!zipFile(srcFile, "", zos, comment)) return false;
+            }
+            return true;
+        } finally {
+            if (zos != null) {
+                zos.finish();
+                zos.close();
+            }
+        }
+    }
+
+    /**
+     * Zip the file.
+     *
+     * @param srcFilePath The path of source file.
+     * @param zipFilePath The path of ZIP file.
+     * @return {@code true}: success<br>{@code false}: fail
+     * @throws IOException if an I/O error has occurred
+     */
+    public static boolean zipFile(final String srcFilePath,
+                                  final String zipFilePath)
+            throws IOException {
+        return zipFile(UtilsBridge.getFileByPath(srcFilePath), UtilsBridge.getFileByPath(zipFilePath), null);
+    }
+
 	
-	/**
-     * 压缩文件
+
+    /**
+     * Zip the files.
      *
      * @param resFilePath 待压缩文件路径
      * @param zipFilePath 压缩文件路径
@@ -51,25 +140,25 @@ public final class ZipUtils {
      * @return {@code true}: 压缩成功<br>{@code false}: 压缩失败
      * @throws IOException IO 错误时抛出
      */
-	public static boolean zipFile(final String resFilePath,
-								  final String zipFilePath,
-			                      final String comment) 
-	        throws IOException {
-		return zipFile(getFileByPath(resFilePath), getFileByPath(zipFilePath), comment);
-	}
-	
-	/**
-     * 压缩文件
+    public static boolean zipFile(final String srcFilePath,
+                                  final String zipFilePath,
+                                  final String comment)
+            throws IOException {
+        return zipFile(UtilsBridge.getFileByPath(srcFilePath), UtilsBridge.getFileByPath(zipFilePath), comment);
+    }
+
+    /**
+     * Zip the file.
      *
      * @param resFile 待压缩文件
      * @param zipFile 压缩文件
      * @return {@code true}: 压缩成功<br>{@code false}: 压缩失败
      * @throws IOException IO 错误时抛出
      */
-    public static boolean zipFile(final File resFile,
+    public static boolean zipFile(final File srcFile,
                                   final File zipFile)
             throws IOException {
-        return zipFile(resFile, zipFile, null);
+        return zipFile(srcFile, zipFile, null);
     }
     
     /**
@@ -81,20 +170,20 @@ public final class ZipUtils {
      * @return {@code true}: 压缩成功<br>{@code false}: 压缩失败
      * @throws IOException IO 错误时抛出
      */
-    public static boolean zipFile(final File resFile,
-    		                      final File zipFile,
-    		                      final String comment) 
-    		throws IOException {
-    	if (resFile == null || zipFile == null) return false;
-    	ZipOutputStream zos = null;
-    	try {
-    		zos = new ZipOutputStream(new FileOutputStream(zipFile));
-    		return zipFile(resFile, "", zos, comment);
-		} finally {
-			if (zos != null) {
-				CloseUtils.closeIO(zos);
-			}
-		}
+    public static boolean zipFile(final File srcFile,
+                                  final File zipFile,
+                                  final String comment)
+            throws IOException {
+        if (srcFile == null || zipFile == null) return false;
+        ZipOutputStream zos = null;
+        try {
+            zos = new ZipOutputStream(new FileOutputStream(zipFile));
+            return zipFile(srcFile, "", zos, comment);
+        } finally {
+            if (zos != null) {
+                zos.close();
+            }
+        }
     }
 	
 	/**
@@ -106,19 +195,19 @@ public final class ZipUtils {
 	 * @return {@code true}：压缩成功 <br> {@code false}: 压缩失败
 	 * @throws IOException IO 错误时抛出
 	 */
-	private static boolean zipFile(final File resFile,
+    private static boolean zipFile(final File srcFile,
 								   String rootPath,
 								   final ZipOutputStream zos,
 								   final String comment) 
 			throws IOException {
 		//getName() : 获取的是路径名的名称序列的最后一个名字, 这意味着表示此抽象路径名的文件或目录的名称被返回。
-		rootPath = rootPath + (isSpace(rootPath) ? "" : File.separator) + resFile.getName();
-		if (resFile.isDirectory()) {
-			File[] fileList = resFile.listFiles();
+        rootPath = rootPath + (UtilsBridge.isSpace(rootPath) ? "" : File.separator) + srcFile.getName();
+        if (srcFile.isDirectory()) {
+            File[] fileList = srcFile.listFiles();
 			// 如果是空文件夹那么创建它，我把'/'换为File.separator测试就不成功，eggPain
 			if (fileList == null || fileList.length <= 0) {
 				ZipEntry entry = new ZipEntry(rootPath + '/');
-				if (!isSpace(comment)) entry.setComment(comment);
+                entry.setComment(comment);
 				//putNextEntry和closeEntry是成对出现的,相当于在write数据的前后做个标记
 				zos.putNextEntry(entry);
 				zos.closeEntry();
@@ -131,9 +220,9 @@ public final class ZipUtils {
 		} else {
 			InputStream is = null;
 			try {
-				is = new BufferedInputStream(new FileInputStream(resFile));
+                is = new BufferedInputStream(new FileInputStream(srcFile));
 				ZipEntry entry = new ZipEntry(rootPath);
-				if (!isSpace(comment)) entry.setComment(comment);
+                entry.setComment(comment);
 				zos.putNextEntry(entry);
 				byte buffer[] = new byte[BUFFER_LEN];
 				int len;
@@ -142,9 +231,11 @@ public final class ZipUtils {
 				}
 				zos.closeEntry();
 			} finally {
-				CloseUtils.closeIO(is);
-			}
+                if (is != null) {
+                    is.close();
+                }
 		}
+        }
 		return true;
 	}
 	
@@ -189,7 +280,7 @@ public final class ZipUtils {
                                                 final String destDirPath,
                                                 final String keyword)
             throws IOException {
-        return unzipFileByKeyword(getFileByPath(zipFilePath), getFileByPath(destDirPath), keyword);
+        return unzipFileByKeyword(UtilsBridge.getFileByPath(zipFilePath), UtilsBridge.getFileByPath(destDirPath), keyword);
     }
 	
     /**
@@ -207,38 +298,53 @@ public final class ZipUtils {
             throws IOException {
         if (zipFile == null || destDir == null) return null;
         List<File> files = new ArrayList<>();
-        ZipFile zf = new ZipFile(zipFile);
-        Enumeration<?> entries = zf.entries();
-        if (isSpace(keyword)) {
-            while (entries.hasMoreElements()) {
-                ZipEntry entry = ((ZipEntry) entries.nextElement());
-                String entryName = entry.getName();
-                if (!unzipChildFile(destDir, files, zf, entry, entryName)) return files;
-            }
-        } else {
-            while (entries.hasMoreElements()) {
-                ZipEntry entry = ((ZipEntry) entries.nextElement());
-                String entryName = entry.getName();
-                if (entryName.contains(keyword)) {
-                    if (!unzipChildFile(destDir, files, zf, entry, entryName)) return files;
+        ZipFile zip = new ZipFile(zipFile);
+        Enumeration<?> entries = zip.entries();
+        try {
+            if (UtilsBridge.isSpace(keyword)) {
+                while (entries.hasMoreElements()) {
+                    ZipEntry entry = ((ZipEntry) entries.nextElement());
+                    String entryName = entry.getName().replace("\\", "/");
+                    if (entryName.contains("../")) {
+                        Log.e("ZipUtils", "entryName: " + entryName + " is dangerous!");
+                        continue;
+                    }
+                    if (!unzipChildFile(destDir, files, zip, entry, entryName)) return files;
+                }
+            } else {
+                while (entries.hasMoreElements()) {
+                    ZipEntry entry = ((ZipEntry) entries.nextElement());
+                    String entryName = entry.getName().replace("\\", "/");
+                    if (entryName.contains("../")) {
+                        Log.e("ZipUtils", "entryName: " + entryName + " is dangerous!");
+                        continue;
+                    }
+                    if (entryName.contains(keyword)) {
+                        if (!unzipChildFile(destDir, files, zip, entry, entryName)) return files;
+                    }
                 }
             }
+        } finally {
+            zip.close();
         }
         return files;
     }
 
-    private static boolean unzipChildFile(File destDir, List<File> files, ZipFile zf, ZipEntry entry, String entryName) throws IOException {
-        String filePath = destDir + File.separator + entryName;
-        File file = new File(filePath);
+    private static boolean unzipChildFile(final File destDir,
+                                          final List<File> files,
+                                          final ZipFile zip,
+                                          final ZipEntry entry,
+                                          final String name) throws IOException {
+        File file = new File(destDir, name);
         files.add(file);
         if (entry.isDirectory()) {
-            if (!createOrExistsDir(file)) return false;
+            return UtilsBridge.createOrExistsDir(file);
         } else {
-            if (!createOrExistsFile(file)) return false;
+            if (!UtilsBridge.createOrExistsFile(file)) return false;
             InputStream in = null;
             OutputStream out = null;
             try {
-                in = new BufferedInputStream(zf.getInputStream(entry));
+                in = new BufferedInputStream(zip.getInputStream(entry));
                 out = new BufferedOutputStream(new FileOutputStream(file));
                 byte buffer[] = new byte[BUFFER_LEN];
                 int len;
@@ -246,7 +352,12 @@ public final class ZipUtils {
                     out.write(buffer, 0, len);
                 }
             } finally {
-                CloseUtils.closeIO(in, out);
+                if (in != null) {
+                    in.close();
+                }
+                if (out != null) {
+                    out.close();
+                }
             }
         }
         return true;
@@ -261,7 +372,7 @@ public final class ZipUtils {
      */
     public static List<String> getFilesPath(final String zipFilePath)
             throws IOException {
-        return getFilesPath(getFileByPath(zipFilePath));
+        return getFilesPath(UtilsBridge.getFileByPath(zipFilePath));
     }
 	
 	 /**
@@ -275,10 +386,18 @@ public final class ZipUtils {
             throws IOException {
         if (zipFile == null) return null;
         List<String> paths = new ArrayList<>();
-        Enumeration<?> entries = new ZipFile(zipFile).entries();
+        ZipFile zip = new ZipFile(zipFile);
+        Enumeration<?> entries = zip.entries();
         while (entries.hasMoreElements()) {
-            paths.add(((ZipEntry) entries.nextElement()).getName());
+            String entryName = ((ZipEntry) entries.nextElement()).getName().replace("\\", "/");
+            if (entryName.contains("../")) {
+                Log.e("ZipUtils", "entryName: " + entryName + " is dangerous!");
+                paths.add(entryName);
+            } else {
+                paths.add(entryName);
+            }
         }
+        zip.close();
         return paths;
     }
 	
@@ -291,7 +410,7 @@ public final class ZipUtils {
      */
     public static List<String> getComments(final String zipFilePath)
             throws IOException {
-        return getComments(getFileByPath(zipFilePath));
+        return getComments(UtilsBridge.getFileByPath(zipFilePath));
     }
 	
 	/**
@@ -301,45 +420,17 @@ public final class ZipUtils {
      * @return 压缩文件中的注释链表
      * @throws IOException IO 错误时抛出
      */
-	public static List<String> getComments(final File zipFile) 
-			throws IOException {
-		if (zipFile == null) return null;
-		List<String> comments = new ArrayList<String>();
-		Enumeration<?> entries = new ZipFile(zipFile).entries();
-		while (entries.hasMoreElements()) {
-			ZipEntry entry = (ZipEntry) entries.nextElement();
-			comments.add(entry.getComment());
-		}
-		return comments;
-	}
-	
-	private static boolean createOrExistsDir(final File file) {
-		return file != null && (file.exists() ? file.isDirectory() : file.mkdirs());
-	}
-	
-	private static boolean createOrExistsFile(final File file) {
-		if (file == null) return false;
-		if (file.exists()) return file.isFile();
-		if (!createOrExistsDir(file.getParentFile())) return false;
-		try {
-            return file.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
+    public static List<String> getComments(final File zipFile)
+            throws IOException {
+        if (zipFile == null) return null;
+        List<String> comments = new ArrayList<>();
+        ZipFile zip = new ZipFile(zipFile);
+        Enumeration<?> entries = zip.entries();
+        while (entries.hasMoreElements()) {
+            ZipEntry entry = ((ZipEntry) entries.nextElement());
+            comments.add(entry.getComment());
         }
-	}
-	
-	private static File getFileByPath(final String filePath) {
-		return isSpace(filePath) ? null : new File(filePath);
-	}
-	
-	private static boolean isSpace(final String s) {
-		if (s == null) return true;
-		for (int i = 0, len = s.length(); i < len; ++i) {
-			if (!Character.isWhitespace(s.charAt(i))) {
-				return false;
-			}
-		}
-		return true;
-	}
+        zip.close();
+        return comments;
+    }
 }

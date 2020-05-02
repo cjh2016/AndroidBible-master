@@ -16,20 +16,64 @@ import androidx.annotation.RequiresApi;
 /**
  * 路径相关工具类
  */
-public class PathUtils {
+public final class PathUtils {
 
-	private PathUtils() {
+    private static final char SEP = File.separatorChar;
+
+    private PathUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }
-	
-	/**
-     * 获取 Android 系统根目录
-     * <pre>path: /system</pre>
+
+    /**
+     * Join the path.
+     *
+     * @param parent The parent of path.
+     * @param child  The child path.
+     * @return the path
+     */
+    public static String join(String parent, String child) {
+        if (TextUtils.isEmpty(child)) return parent;
+        if (parent == null) {
+            parent = "";
+        }
+        int len = parent.length();
+        String legalSegment = getLegalSegment(child);
+        String newPath;
+        if (len == 0) {
+            newPath = SEP + legalSegment;
+        } else if (parent.charAt(len - 1) == SEP) {
+            newPath = parent + legalSegment;
+        } else {
+            newPath = parent + SEP + legalSegment;
+        }
+        return newPath;
+    }
+
+    private static String getLegalSegment(String segment) {
+        int st = -1, end = -1;
+        char[] charArray = segment.toCharArray();
+        for (int i = 0; i < charArray.length; i++) {
+            char c = charArray[i];
+            if (c != SEP) {
+                if (st == -1) {
+                    st = i;
+                }
+                end = i;
+            }
+        }
+        if (st >= 0 && end >= st) {
+            return segment.substring(st, end + 1);
+        }
+        throw new IllegalArgumentException("segment of <" + segment + "> is illegal");
+    }
+
+    /**
+     * Return the path of /system.
      *
      * @return 系统根目录
      */
     public static String getRootPath() {
-    	return Environment.getRootDirectory().getAbsolutePath();
+        return getAbsolutePath(Environment.getRootDirectory());
     }
     
     /**
@@ -39,7 +83,7 @@ public class PathUtils {
      * @return data 目录
      */
     public static String getDataPath() {
-    	return Environment.getDataDirectory().getAbsolutePath();
+        return getAbsolutePath(Environment.getDataDirectory());
     }
     
     /**
@@ -48,406 +92,384 @@ public class PathUtils {
      *
      * @return 缓存目录
      */
-    public static String getIntDownloadCachePath() {
-        return Environment.getDownloadCacheDirectory().getAbsolutePath();
-    }
-    
-    /**
-     * 获取此应用的缓存目录
-     * <pre>path: /data/data/package/cache</pre>
-     *
-     * @return 此应用的缓存目录
-     */
-    public static String getAppIntCachePath() {
-        return Utils.getApp().getCacheDir().getAbsolutePath();
-    }
-    
-    /**
-     * 获取此应用的文件目录
-     * <pre>path: /data/data/package/files</pre>
-     *
-     * @return 此应用的文件目录
-     */
-    public static String getAppIntFilesPath() {
-        return Utils.getApp().getFilesDir().getAbsolutePath();
-    }
-    
-    /**
-     * 获取此应用的数据库文件目录
-     * <pre>path: /data/data/package/databases/name</pre>
-     *
-     * @param name 数据库文件名
-     * @return 数据库文件目录
-     */
-    public static String getAppIntDbPath(String name) {
-        return Utils.getApp().getDatabasePath(name).getAbsolutePath();
-    }
-    
-    /**
-     * 获取 Android 外置储存的根目录
-     * <pre>path: /storage/emulated/0</pre>
-     *
-     * @return 外置储存根目录
-     */
-    public static String getExtStoragePath() {
-        return Environment.getExternalStorageDirectory().getAbsolutePath();
-    }
-    
-    /**
-     * 获取闹钟铃声目录
-     * <pre>path: /storage/emulated/0/Alarms</pre>
-     *
-     * @return 闹钟铃声目录
-     */
-    public static String getExtAlarmsPath() {
-        return Environment
-                .getExternalStoragePublicDirectory(Environment.DIRECTORY_ALARMS)
-                .getAbsolutePath();
-    }
-    
-    /**
-     * 获取相机拍摄的照片和视频的目录
-     * <pre>path: /storage/emulated/0/DCIM</pre>
-     *
-     * @return 照片和视频目录
-     */
-    public static String getExtDcimPath() {
-        return Environment
-                .getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
-                .getAbsolutePath();
-    }
-    
-    /**
-     * 获取文档目录
-     * <pre>path: /storage/emulated/0/Documents</pre>
-     *
-     * @return 文档目录
-     */
-    @SuppressLint("NewApi")
-	@RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public static String getExtDocumentsPath() {
-        return Environment
-                .getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
-                .getAbsolutePath();
-    }
-    
-    /**
-     * 获取下载目录
-     * <pre>path: /storage/emulated/0/Download</pre>
-     *
-     * @return 下载目录
-     */
-    public static String getExtDownloadsPath() {
-        return Environment
-                .getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-                .getAbsolutePath();
-    }
-    
-    /**
-     * 获取视频目录
-     * <pre>path: /storage/emulated/0/Movies</pre>
-     *
-     * @return 视频目录
-     */
-    public static String getExtMoviesPath() {
-        return Environment
-                .getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES)
-                .getAbsolutePath();
-    }
-    
-    /**
-     * 获取音乐目录
-     * <pre>path: /storage/emulated/0/Music</pre>
-     *
-     * @return 音乐目录
-     */
-    public static String getExtMusicPath() {
-        return Environment
-                .getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)
-                .getAbsolutePath();
-    }
-    
-    /**
-     * 获取提示音目录
-     * <pre>path: /storage/emulated/0/Notifications</pre>
-     *
-     * @return 提示音目录
-     */
-    public static String getExtNotificationsPath() {
-        return Environment
-                .getExternalStoragePublicDirectory(Environment.DIRECTORY_NOTIFICATIONS)
-                .getAbsolutePath();
-    }
-    
-    /**
-     * 获取图片目录
-     * <pre>path: /storage/emulated/0/Pictures</pre>
-     *
-     * @return 图片目录
-     */
-    public static String getExtPicturesPath() {
-        return Environment
-                .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                .getAbsolutePath();
-    }
-    
-    /**
-     * 获取 Podcasts 目录
-     * <pre>path: /storage/emulated/0/Podcasts</pre>
-     *
-     * @return Podcasts 目录
-     */
-    public static String getExtPodcastsPath() {
-        return Environment
-                .getExternalStoragePublicDirectory(Environment.DIRECTORY_PODCASTS)
-                .getAbsolutePath();
-    }
-    
-    /**
-     * 获取铃声目录
-     * <pre>path: /storage/emulated/0/Ringtones</pre>
-     *
-     * @return 下载目录
-     */
-    public static String getExtRingtonesPath() {
-        return Environment
-                .getExternalStoragePublicDirectory(Environment.DIRECTORY_RINGTONES)
-                .getAbsolutePath();
-    }
-    
-    /**
-     * 获取此应用在外置储存中的缓存目录
-     * <pre>path: /storage/emulated/0/Android/data/package/cache</pre>
-     *
-     * @return 此应用在外置储存中的缓存目录
-     */
-    public static String getAppExtCachePath() {
-        return Utils.getApp().getExternalCacheDir().getAbsolutePath();
-    }
-    
-    /**
-     * 获取此应用在外置储存中的文件目录
-     * <pre>path: /storage/emulated/0/Android/data/package/files</pre>
-     *
-     * @return 此应用在外置储存中的文件目录
-     */
-    public static String getAppExtFilePath() {
-        return Utils.getApp().getExternalFilesDir(null).getAbsolutePath();
-    }
-    
-    /**
-     * 获取此应用在外置储存中的闹钟铃声目录
-     * <pre>path: /storage/emulated/0/Android/data/package/files/Alarms</pre>
-     *
-     * @return 此应用在外置储存中的闹钟铃声目录
-     */
-    public static String getAppExtAlarmsPath() {
-        return Utils.getApp().getExternalFilesDir(Environment.DIRECTORY_ALARMS)
-                .getAbsolutePath();
+    public static String getDownloadCachePath() {
+        return getAbsolutePath(Environment.getDownloadCacheDirectory());
     }
 
     /**
-     * 获取此应用在外置储存中的相机目录
-     * <pre>path: /storage/emulated/0/Android/data/package/files/DCIM</pre>
+     * Return the path of /data/data/package.
      *
-     * @return 此应用在外置储存中的相机目录
+     * @return the path of /data/data/package
      */
-    public static String getAppExtDcimPath() {
-        return Utils.getApp().getExternalFilesDir(Environment.DIRECTORY_DCIM)
-                .getAbsolutePath();
-    }
-
-    /**
-     * 获取此应用在外置储存中的文档目录
-     * <pre>path: /storage/emulated/0/Android/data/package/files/Documents</pre>
-     *
-     * @return 此应用在外置储存中的文档目录
-     */
-    @SuppressLint("NewApi")
-	@RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public static String getAppExtDocumentsPath() {
-        return Utils.getApp().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
-                .getAbsolutePath();
-    }
-
-    /**
-     * 获取此应用在外置储存中的闹钟目录
-     * <pre>path: /storage/emulated/0/Android/data/package/files/Download</pre>
-     *
-     * @return 此应用在外置储存中的闹钟目录
-     */
-    public static String getAppExtDownloadPath() {
-        return Utils.getApp().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
-                .getAbsolutePath();
-    }
-
-    /**
-     * 获取此应用在外置储存中的视频目录
-     * <pre>path: /storage/emulated/0/Android/data/package/files/Movies</pre>
-     *
-     * @return 此应用在外置储存中的视频目录
-     */
-    public static String getAppExtMoviesPath() {
-        return Utils.getApp().getExternalFilesDir(Environment.DIRECTORY_MOVIES)
-                .getAbsolutePath();
-    }
-
-    /**
-     * 获取此应用在外置储存中的音乐目录
-     * <pre>path: /storage/emulated/0/Android/data/package/files/Music</pre>
-     *
-     * @return 此应用在外置储存中的音乐目录
-     */
-    public static String getAppExtMusicPath() {
-        return Utils.getApp().getExternalFilesDir(Environment.DIRECTORY_MUSIC)
-                .getAbsolutePath();
-    }
-
-    /**
-     * 获取此应用在外置储存中的提示音目录
-     * <pre>path: /storage/emulated/0/Android/data/package/files/Notifications</pre>
-     *
-     * @return 此应用在外置储存中的提示音目录
-     */
-    public static String getAppExtNotificationsPath() {
-        return Utils.getApp().getExternalFilesDir(Environment.DIRECTORY_NOTIFICATIONS)
-                .getAbsolutePath();
-    }
-
-    /**
-     * 获取此应用在外置储存中的图片目录
-     * <pre>path: /storage/emulated/0/Android/data/package/files/Pictures</pre>
-     *
-     * @return 此应用在外置储存中的图片目录
-     */
-    public static String getAppExtPicturesPath() {
-        return Utils.getApp().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-                .getAbsolutePath();
-    }
-
-    /**
-     * 获取此应用在外置储存中的 Podcasts 目录
-     * <pre>path: /storage/emulated/0/Android/data/package/files/Podcasts</pre>
-     *
-     * @return 此应用在外置储存中的 Podcasts 目录
-     */
-    public static String getAppExtPodcastsPath() {
-        return Utils.getApp().getExternalFilesDir(Environment.DIRECTORY_PODCASTS)
-                .getAbsolutePath();
-    }
-
-    /**
-     * 获取此应用在外置储存中的铃声目录
-     * <pre>path: /storage/emulated/0/Android/data/package/files/Ringtones</pre>
-     *
-     * @return 此应用在外置储存中的铃声目录
-     */
-    public static String getAppExtRingtonesPath() {
-        return Utils.getApp().getExternalFilesDir(Environment.DIRECTORY_RINGTONES)
-                .getAbsolutePath();
-    }
-    
-    /**
-     * 获取此应用的 Obb 目录
-     * <pre>path: /storage/emulated/0/Android/obb/package</pre>
-     * <pre>一般用来存放游戏数据包</pre>
-     *
-     * @return 此应用的 Obb 目录
-     */
-    public static String getObbPath() {
-        return Utils.getApp().getObbDir().getAbsolutePath();
-    }
-    
-    @SuppressLint("NewApi")
-	public static String getFilePathByUri(Context context, Uri uri) {
-        String path = null;
-        // 以 file:// 开头的
-        if (ContentResolver.SCHEME_FILE.equals(uri.getScheme())) {
-            path = uri.getPath();
-            return path;
+    public static String getInternalAppDataPath() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            return Utils.getApp().getApplicationInfo().dataDir;
         }
-        // 以 content:// 开头的，比如 content://media/extenral/images/media/17766
-        if (ContentResolver.SCHEME_CONTENT.equals(uri.getScheme()) && Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-            Cursor cursor = context.getContentResolver().query(uri, new String[]{MediaStore.Images.Media.DATA}, null, null, null);
-            if (cursor != null) {
-                if (cursor.moveToFirst()) {
-                    int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                    if (columnIndex > -1) {
-                        path = cursor.getString(columnIndex);
-                    }
-                }
-                cursor.close();
-            }
-            return path;
-        }
-        // 4.4及之后的 是以 content:// 开头的，比如 content://com.android.providers.media.documents/document/image%3A235700
-        if (ContentResolver.SCHEME_CONTENT.equals(uri.getScheme()) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            if (DocumentsContract.isDocumentUri(context, uri)) {
-                if (isExternalStorageDocument(uri)) {
-                    // ExternalStorageProvider
-                    final String docId = DocumentsContract.getDocumentId(uri);
-                    final String[] split = docId.split(":");
-                    final String type = split[0];
-                    if ("primary".equalsIgnoreCase(type)) {
-                        path = Environment.getExternalStorageDirectory() + "/" + split[1];
-                        return path;
-                    }
-                } else if (isDownloadsDocument(uri)) {
-                    // DownloadsProvider
-                    final String id = DocumentsContract.getDocumentId(uri);
-                    final Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"),
-                            Long.valueOf(id));
-                    path = getDataColumn(context, contentUri, null, null);
-                    return path;
-                } else if (isMediaDocument(uri)) {
-                    // MediaProvider
-                    final String docId = DocumentsContract.getDocumentId(uri);
-                    final String[] split = docId.split(":");
-                    final String type = split[0];
-                    Uri contentUri = null;
-                    if ("image".equals(type)) {
-                        contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                    } else if ("video".equals(type)) {
-                        contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-                    } else if ("audio".equals(type)) {
-                        contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-                    }
-                    final String selection = "_id=?";
-                    final String[] selectionArgs = new String[]{split[1]};
-                    path = getDataColumn(context, contentUri, selection, selectionArgs);
-                    return path;
-                }
-            }
-        }
-        return null;
-    }
-    
-    private static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
-        Cursor cursor = null;
-        final String column = "_data";
-        final String[] projection = {column};
-        try {
-            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
-            if (cursor != null && cursor.moveToFirst()) {
-                final int column_index = cursor.getColumnIndexOrThrow(column);
-                return cursor.getString(column_index);
-            }
-        } finally {
-            if (cursor != null)
-                cursor.close();
-        }
-        return null;
-    }
-    
-    private static boolean isExternalStorageDocument(Uri uri) {
-        return "com.android.externalstorage.documents".equals(uri.getAuthority());
+        return getAbsolutePath(Utils.getApp().getDataDir());
     }
 
-    private static boolean isDownloadsDocument(Uri uri) {
-        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
+    /**
+     * Return the path of /data/data/package/code_cache.
+     *
+     * @return the path of /data/data/package/code_cache
+     */
+    public static String getInternalAppCodeCacheDir() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            return Utils.getApp().getApplicationInfo().dataDir + "/code_cache";
+        }
+        return getAbsolutePath(Utils.getApp().getCodeCacheDir());
     }
 
-    private static boolean isMediaDocument(Uri uri) {
-        return "com.android.providers.media.documents".equals(uri.getAuthority());
+    /**
+     * Return the path of /data/data/package/cache.
+     *
+     * @return the path of /data/data/package/cache
+     */
+    public static String getInternalAppCachePath() {
+        return getAbsolutePath(Utils.getApp().getCacheDir());
+    }
+
+    /**
+     * Return the path of /data/data/package/databases.
+     *
+     * @return the path of /data/data/package/databases
+     */
+    public static String getInternalAppDbsPath() {
+        return Utils.getApp().getApplicationInfo().dataDir + "/databases";
+    }
+
+    /**
+     * Return the path of /data/data/package/databases/name.
+     *
+     * @param name The name of database.
+     * @return the path of /data/data/package/databases/name
+     */
+    public static String getInternalAppDbPath(String name) {
+        return getAbsolutePath(Utils.getApp().getDatabasePath(name));
+    }
+
+    /**
+     * Return the path of /data/data/package/files.
+     *
+     * @return the path of /data/data/package/files
+     */
+    public static String getInternalAppFilesPath() {
+        return getAbsolutePath(Utils.getApp().getFilesDir());
+    }
+
+    /**
+     * Return the path of /data/data/package/shared_prefs.
+     *
+     * @return the path of /data/data/package/shared_prefs
+     */
+    public static String getInternalAppSpPath() {
+        return Utils.getApp().getApplicationInfo().dataDir + "/shared_prefs";
+    }
+
+    /**
+     * Return the path of /data/data/package/no_backup.
+     *
+     * @return the path of /data/data/package/no_backup
+     */
+    public static String getInternalAppNoBackupFilesPath() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            return Utils.getApp().getApplicationInfo().dataDir + "/no_backup";
+        }
+        return getAbsolutePath(Utils.getApp().getNoBackupFilesDir());
+    }
+
+    /**
+     * Return the path of /storage/emulated/0.
+     *
+     * @return the path of /storage/emulated/0
+     */
+    public static String getExternalStoragePath() {
+        if (!UtilsBridge.isSDCardEnableByEnvironment()) return "";
+        return getAbsolutePath(Environment.getExternalStorageDirectory());
+    }
+
+    /**
+     * Return the path of /storage/emulated/0/Music.
+     *
+     * @return the path of /storage/emulated/0/Music
+     */
+    public static String getExternalMusicPath() {
+        if (!UtilsBridge.isSDCardEnableByEnvironment()) return "";
+        return getAbsolutePath(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC));
+    }
+
+    /**
+     * Return the path of /storage/emulated/0/Podcasts.
+     *
+     * @return the path of /storage/emulated/0/Podcasts
+     */
+    public static String getExternalPodcastsPath() {
+        if (!UtilsBridge.isSDCardEnableByEnvironment()) return "";
+        return getAbsolutePath(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PODCASTS));
+    }
+
+    /**
+     * Return the path of /storage/emulated/0/Ringtones.
+     *
+     * @return the path of /storage/emulated/0/Ringtones
+     */
+    public static String getExternalRingtonesPath() {
+        if (!UtilsBridge.isSDCardEnableByEnvironment()) return "";
+        return getAbsolutePath(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_RINGTONES));
+    }
+
+    /**
+     * Return the path of /storage/emulated/0/Alarms.
+     *
+     * @return the path of /storage/emulated/0/Alarms
+     */
+    public static String getExternalAlarmsPath() {
+        if (!UtilsBridge.isSDCardEnableByEnvironment()) return "";
+        return getAbsolutePath(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_ALARMS));
+    }
+
+    /**
+     * Return the path of /storage/emulated/0/Notifications.
+     *
+     * @return the path of /storage/emulated/0/Notifications
+     */
+    public static String getExternalNotificationsPath() {
+        if (!UtilsBridge.isSDCardEnableByEnvironment()) return "";
+        return getAbsolutePath(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_NOTIFICATIONS));
+    }
+
+    /**
+     * Return the path of /storage/emulated/0/Pictures.
+     *
+     * @return the path of /storage/emulated/0/Pictures
+     */
+    public static String getExternalPicturesPath() {
+        if (!UtilsBridge.isSDCardEnableByEnvironment()) return "";
+        return getAbsolutePath(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES));
+    }
+
+    /**
+     * Return the path of /storage/emulated/0/Movies.
+     *
+     * @return the path of /storage/emulated/0/Movies
+     */
+    public static String getExternalMoviesPath() {
+        if (!UtilsBridge.isSDCardEnableByEnvironment()) return "";
+        return getAbsolutePath(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES));
+    }
+
+    /**
+     * Return the path of /storage/emulated/0/Download.
+     *
+     * @return the path of /storage/emulated/0/Download
+     */
+    public static String getExternalDownloadsPath() {
+        if (!UtilsBridge.isSDCardEnableByEnvironment()) return "";
+        return getAbsolutePath(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS));
+    }
+
+    /**
+     * Return the path of /storage/emulated/0/DCIM.
+     *
+     * @return the path of /storage/emulated/0/DCIM
+     */
+    public static String getExternalDcimPath() {
+        if (!UtilsBridge.isSDCardEnableByEnvironment()) return "";
+        return getAbsolutePath(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM));
+    }
+
+    /**
+     * Return the path of /storage/emulated/0/Documents.
+     *
+     * @return the path of /storage/emulated/0/Documents
+     */
+    public static String getExternalDocumentsPath() {
+        if (!UtilsBridge.isSDCardEnableByEnvironment()) return "";
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            return getAbsolutePath(Environment.getExternalStorageDirectory()) + "/Documents";
+        }
+        return getAbsolutePath(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS));
+    }
+
+    /**
+     * Return the path of /storage/emulated/0/Android/data/package.
+     *
+     * @return the path of /storage/emulated/0/Android/data/package
+     */
+    public static String getExternalAppDataPath() {
+        if (!UtilsBridge.isSDCardEnableByEnvironment()) return "";
+        File externalCacheDir = Utils.getApp().getExternalCacheDir();
+        if (externalCacheDir == null) return "";
+        return getAbsolutePath(externalCacheDir.getParentFile());
+    }
+
+    /**
+     * Return the path of /storage/emulated/0/Android/data/package/cache.
+     *
+     * @return the path of /storage/emulated/0/Android/data/package/cache
+     */
+    public static String getExternalAppCachePath() {
+        if (!UtilsBridge.isSDCardEnableByEnvironment()) return "";
+        return getAbsolutePath(Utils.getApp().getExternalCacheDir());
+    }
+
+    /**
+     * Return the path of /storage/emulated/0/Android/data/package/files.
+     *
+     * @return the path of /storage/emulated/0/Android/data/package/files
+     */
+    public static String getExternalAppFilesPath() {
+        if (!UtilsBridge.isSDCardEnableByEnvironment()) return "";
+        return getAbsolutePath(Utils.getApp().getExternalFilesDir(null));
+    }
+
+    /**
+     * Return the path of /storage/emulated/0/Android/data/package/files/Music.
+     *
+     * @return the path of /storage/emulated/0/Android/data/package/files/Music
+     */
+    public static String getExternalAppMusicPath() {
+        if (!UtilsBridge.isSDCardEnableByEnvironment()) return "";
+        return getAbsolutePath(Utils.getApp().getExternalFilesDir(Environment.DIRECTORY_MUSIC));
+    }
+
+    /**
+     * Return the path of /storage/emulated/0/Android/data/package/files/Podcasts.
+     *
+     * @return the path of /storage/emulated/0/Android/data/package/files/Podcasts
+     */
+    public static String getExternalAppPodcastsPath() {
+        if (!UtilsBridge.isSDCardEnableByEnvironment()) return "";
+        return getAbsolutePath(Utils.getApp().getExternalFilesDir(Environment.DIRECTORY_PODCASTS));
+    }
+
+    /**
+     * Return the path of /storage/emulated/0/Android/data/package/files/Ringtones.
+     *
+     * @return the path of /storage/emulated/0/Android/data/package/files/Ringtones
+     */
+    public static String getExternalAppRingtonesPath() {
+        if (!UtilsBridge.isSDCardEnableByEnvironment()) return "";
+        return getAbsolutePath(Utils.getApp().getExternalFilesDir(Environment.DIRECTORY_RINGTONES));
+    }
+
+    /**
+     * Return the path of /storage/emulated/0/Android/data/package/files/Alarms.
+     *
+     * @return the path of /storage/emulated/0/Android/data/package/files/Alarms
+     */
+    public static String getExternalAppAlarmsPath() {
+        if (!UtilsBridge.isSDCardEnableByEnvironment()) return "";
+        return getAbsolutePath(Utils.getApp().getExternalFilesDir(Environment.DIRECTORY_ALARMS));
+    }
+
+    /**
+     * Return the path of /storage/emulated/0/Android/data/package/files/Notifications.
+     *
+     * @return the path of /storage/emulated/0/Android/data/package/files/Notifications
+     */
+    public static String getExternalAppNotificationsPath() {
+        if (!UtilsBridge.isSDCardEnableByEnvironment()) return "";
+        return getAbsolutePath(Utils.getApp().getExternalFilesDir(Environment.DIRECTORY_NOTIFICATIONS));
+    }
+
+    /**
+     * Return the path of /storage/emulated/0/Android/data/package/files/Pictures.
+     *
+     * @return path of /storage/emulated/0/Android/data/package/files/Pictures
+     */
+    public static String getExternalAppPicturesPath() {
+        if (!UtilsBridge.isSDCardEnableByEnvironment()) return "";
+        return getAbsolutePath(Utils.getApp().getExternalFilesDir(Environment.DIRECTORY_PICTURES));
+    }
+
+    /**
+     * Return the path of /storage/emulated/0/Android/data/package/files/Movies.
+     *
+     * @return the path of /storage/emulated/0/Android/data/package/files/Movies
+     */
+    public static String getExternalAppMoviesPath() {
+        if (!UtilsBridge.isSDCardEnableByEnvironment()) return "";
+        return getAbsolutePath(Utils.getApp().getExternalFilesDir(Environment.DIRECTORY_MOVIES));
+    }
+
+    /**
+     * Return the path of /storage/emulated/0/Android/data/package/files/Download.
+     *
+     * @return the path of /storage/emulated/0/Android/data/package/files/Download
+     */
+    public static String getExternalAppDownloadPath() {
+        if (!UtilsBridge.isSDCardEnableByEnvironment()) return "";
+        return getAbsolutePath(Utils.getApp().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS));
+    }
+
+    /**
+     * Return the path of /storage/emulated/0/Android/data/package/files/DCIM.
+     *
+     * @return the path of /storage/emulated/0/Android/data/package/files/DCIM
+     */
+    public static String getExternalAppDcimPath() {
+        if (!UtilsBridge.isSDCardEnableByEnvironment()) return "";
+        return getAbsolutePath(Utils.getApp().getExternalFilesDir(Environment.DIRECTORY_DCIM));
+    }
+
+    /**
+     * Return the path of /storage/emulated/0/Android/data/package/files/Documents.
+     *
+     * @return the path of /storage/emulated/0/Android/data/package/files/Documents
+     */
+    public static String getExternalAppDocumentsPath() {
+        if (!UtilsBridge.isSDCardEnableByEnvironment()) return "";
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            return getAbsolutePath(Utils.getApp().getExternalFilesDir(null)) + "/Documents";
+        }
+        return getAbsolutePath(Utils.getApp().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS));
+    }
+
+    /**
+     * Return the path of /storage/emulated/0/Android/obb/package.
+     *
+     * @return the path of /storage/emulated/0/Android/obb/package
+     */
+    public static String getExternalAppObbPath() {
+        if (!UtilsBridge.isSDCardEnableByEnvironment()) return "";
+        return getAbsolutePath(Utils.getApp().getObbDir());
+    }
+
+    public static String getRootPathExternalFirst() {
+        String rootPath = getExternalStoragePath();
+        if (TextUtils.isEmpty(rootPath)) {
+            rootPath = getRootPath();
+        }
+        return rootPath;
+    }
+
+    public static String getAppDataPathExternalFirst() {
+        String appDataPath = getExternalAppDataPath();
+        if (TextUtils.isEmpty(appDataPath)) {
+            appDataPath = getInternalAppDataPath();
+        }
+        return appDataPath;
+    }
+
+    public static String getFilesPathExternalFirst() {
+        String filePath = getExternalAppFilesPath();
+        if (TextUtils.isEmpty(filePath)) {
+            filePath = getInternalAppFilesPath();
+        }
+        return filePath;
+    }
+
+    public static String getCachePathExternalFirst() {
+        String appPath = getExternalAppCachePath();
+        if (TextUtils.isEmpty(appPath)) {
+            appPath = getInternalAppCachePath();
+        }
+        return appPath;
+    }
+
+    private static String getAbsolutePath(final File file) {
+        if (file == null) return "";
+        return file.getAbsolutePath();
     }
 }

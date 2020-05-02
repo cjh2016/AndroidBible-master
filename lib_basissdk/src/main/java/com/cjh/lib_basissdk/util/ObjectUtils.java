@@ -1,7 +1,9 @@
 package com.cjh.lib_basissdk.util;
 
 import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Map;
 import android.annotation.SuppressLint;
 import android.os.Build;
@@ -10,49 +12,46 @@ import android.util.SparseBooleanArray;
 import android.util.SparseIntArray;
 import android.util.SparseLongArray;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.collection.LongSparseArray;
 import androidx.collection.SimpleArrayMap;
 
 public final class ObjectUtils {
-	
-	private ObjectUtils() {
-		throw new UnsupportedOperationException("u can't instantiate me...");
-	}
-	
-	public static boolean equals(Object o1, Object o2) {
-		return ((o1 == o2) || (o1 == null ? o2 == null : o1.equals(o2)));
-	}
-	
-	/**
-     * 判断对象是不是空
+
+    private ObjectUtils() {
+        throw new UnsupportedOperationException("u can't instantiate me...");
+    }
+
+    /**
+     * Return whether object is empty.
      *
-     * @param obj 对象.
+     * @param obj The object.
      * @return {@code true}: yes<br>{@code false}: no
      */
-	@SuppressLint("NewApi")
-	public static boolean isEmpty(final Object obj) {
-		if (obj == null) {
-			return true;
-		}
-		if (obj.getClass().isArray() && Array.getLength(obj) == 0) {
-			return true;
-		}
-		if (obj instanceof CharSequence && obj.toString().length() == 0) {
-			return true;
-		}
-		if (obj instanceof Collection && ((Collection) obj).isEmpty()) {
-			return true;
-		}
-		if (obj instanceof Map && ((Map) obj).isEmpty()) {
+    public static boolean isEmpty(final Object obj) {
+        if (obj == null) {
             return true;
         }
-		if (obj instanceof SimpleArrayMap && ((SimpleArrayMap) obj).isEmpty()) {
-			return true;
-		}
-		if (obj instanceof SparseArray && ((SparseArray) obj).size() == 0) {
-			return true;
-		}
-		if (obj instanceof SparseBooleanArray && ((SparseBooleanArray) obj).size() == 0) {
+        if (obj.getClass().isArray() && Array.getLength(obj) == 0) {
+            return true;
+        }
+        if (obj instanceof CharSequence && obj.toString().length() == 0) {
+            return true;
+        }
+        if (obj instanceof Collection && ((Collection) obj).isEmpty()) {
+            return true;
+        }
+        if (obj instanceof Map && ((Map) obj).isEmpty()) {
+            return true;
+        }
+        if (obj instanceof SimpleArrayMap && ((SimpleArrayMap) obj).isEmpty()) {
+            return true;
+        }
+        if (obj instanceof SparseArray && ((SparseArray) obj).size() == 0) {
+            return true;
+        }
+        if (obj instanceof SparseBooleanArray && ((SparseBooleanArray) obj).size() == 0) {
             return true;
         }
         if (obj instanceof SparseIntArray && ((SparseIntArray) obj).size() == 0) {
@@ -107,19 +106,16 @@ public final class ObjectUtils {
         return obj == null || obj.size() == 0;
     }
 
-    @SuppressLint("NewApi")
-	
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     public static boolean isEmpty(final SparseLongArray obj) {
         return obj == null || obj.size() == 0;
     }
 
-    @SuppressLint("NewApi")
-	
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     public static boolean isEmpty(final android.util.LongSparseArray obj) {
         return obj == null || obj.size() == 0;
     }
-    
-    
+
     /**
      * Return whether object is not empty.
      *
@@ -163,12 +159,12 @@ public final class ObjectUtils {
         return !isEmpty(obj);
     }
 
-    
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     public static boolean isNotEmpty(final SparseLongArray obj) {
         return !isEmpty(obj);
     }
 
-    
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     public static boolean isNotEmpty(final android.util.LongSparseArray obj) {
         return !isEmpty(obj);
     }
@@ -180,24 +176,48 @@ public final class ObjectUtils {
      * @param o2 The second object.
      * @return {@code true}: yes<br>{@code false}: no
      */
-    public static boolean equals2(final Object o1, final Object o2) {
+    public static boolean equals(final Object o1, final Object o2) {
         return o1 == o2 || (o1 != null && o1.equals(o2));
     }
 
     /**
-     * Require the object is not null.
-     *
-     * @param object  The object.
-     * @param message The message to use with the NullPointerException.
-     * @param <T>     The value type.
-     * @return the object
-     * @throws NullPointerException if object is null
+     * Returns 0 if the arguments are identical and {@code
+     * c.compare(a, b)} otherwise.
+     * Consequently, if both arguments are {@code null} 0
+     * is returned.
      */
-    public static <T> T requireNonNull(final T object, final String message) {
-        if (object == null) {
-            throw new NullPointerException(message);
+    public static <T> int compare(T a, T b, @NonNull Comparator<? super T> c) {
+        return (a == b) ? 0 : c.compare(a, b);
+    }
+
+    /**
+     * Checks that the specified object reference is not {@code null}.
+     */
+    public static <T> T requireNonNull(T obj) {
+        if (obj == null) throw new NullPointerException();
+        return obj;
+    }
+
+    /**
+     * Checks that the specified object reference is not {@code null} and
+     * throws a customized {@link NullPointerException} if it is.
+     */
+    public static <T> T requireNonNull(T obj, String ifNullTip) {
+        if (obj == null) throw new NullPointerException(ifNullTip);
+        return obj;
+    }
+
+    /**
+     * Require the objects are not null.
+     *
+     * @param objects The object.
+     * @throws NullPointerException if any object is null in objects
+     */
+    public static void requireNonNulls(final Object... objects) {
+        if (objects == null) throw new NullPointerException();
+        for (Object object : objects) {
+            if (object == null) throw new NullPointerException();
         }
-        return object;
     }
 
     /**
@@ -216,6 +236,23 @@ public final class ObjectUtils {
     }
 
     /**
+     * Returns the result of calling {@code toString} for a non-{@code
+     * null} argument and {@code "null"} for a {@code null} argument.
+     */
+    public static String toString(Object obj) {
+        return String.valueOf(obj);
+    }
+
+    /**
+     * Returns the result of calling {@code toString} on the first
+     * argument if the first argument is not {@code null} and returns
+     * the second argument otherwise.
+     */
+    public static String toString(Object o, String nullDefault) {
+        return (o != null) ? o.toString() : nullDefault;
+    }
+
+    /**
      * Return the hash code of object.
      *
      * @param o The object.
@@ -225,4 +262,10 @@ public final class ObjectUtils {
         return o != null ? o.hashCode() : 0;
     }
 
+    /**
+     * Return the hash code of objects.
+     */
+    public static int hashCodes(Object... values) {
+        return Arrays.hashCode(values);
+    }
 }

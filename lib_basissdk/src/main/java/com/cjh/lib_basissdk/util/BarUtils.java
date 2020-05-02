@@ -76,7 +76,7 @@ public final class BarUtils {
 	 */
 	public static int getStatusBarHeightDynamic() {
 	     Rect rect = new Rect();
-	     Utils.getCurrActivity().getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
+	     UtilsBridge.getTopActivity().getWindow().getDecorView().getWindowVisibleDisplayFrame(rect);
 	     return rect.top;
 	}
 	

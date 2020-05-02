@@ -1,8 +1,10 @@
 package com.cjh.lib_basissdk.util;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import android.R.integer;
 import android.text.style.TtsSpan.ElectronicBuilder;
+import android.util.Log;
 
 /**
  * <pre>
@@ -34,12 +37,14 @@ import android.text.style.TtsSpan.ElectronicBuilder;
  */
 public final class FileIOUtils {
 
-	private FileIOUtils() {
+    
+
+    private FileIOUtils() {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
 	private static final String LINE_SEP = System.getProperty("line.separator");
-	private static int sBufferSize = 8192;
+	private static int sBufferSize = 524288;
 	
 	/**
      * 将输入流写入文件
@@ -49,7 +54,7 @@ public final class FileIOUtils {
      * @return {@code true}: 写入成功<br>{@code false}: 写入失败
      */
     public static boolean writeFileFromIS(final String filePath, final InputStream is) {
-        return writeFileFromIS(getFileByPath(filePath), is, false);
+        return writeFileFromIS(UtilsBridge.getFileByPath(filePath), is, false, null);
     }
 	
 	/**
@@ -60,8 +65,10 @@ public final class FileIOUtils {
      * @param append   是否追加在文件末
      * @return {@code true}: 写入成功<br>{@code false}: 写入失败
      */
-    public static boolean writeFileFromIS(final String filePath, final InputStream is, final boolean append) {
-        return writeFileFromIS(getFileByPath(filePath), is, append);
+    public static boolean writeFileFromIS(final String filePath,
+                                          final InputStream is,
+                                          final boolean append) {
+        return writeFileFromIS(UtilsBridge.getFileByPath(filePath), is, append, null);
     }
 	
 	/**
@@ -72,44 +79,141 @@ public final class FileIOUtils {
      * @return {@code true}: 写入成功<br>{@code false}: 写入失败
      */
     public static boolean writeFileFromIS(final File file, final InputStream is) {
-        return writeFileFromIS(file, is, false);
+        return writeFileFromIS(file, is, false, null);
     }
-	
-	/**
-     * 将输入流写入文件
+
+    /**
+     * Write file from input stream.
      *
-     * @param file   文件
-     * @param is     输入流
-     * @param append 是否追加在文件末
-     * @return {@code true}: 写入成功<br>{@code false}: 写入失败
+     * @param file   The file.
+     * @param is     The input stream.
+     * @param append True to append, false otherwise.
+     * @return {@code true}: success<br>{@code false}: fail
      */
-	public static boolean writeFileFromIS(final File file, final InputStream is, final boolean append) {
-		if (!createOrExistsFile(file) || null == is) return false;
-		OutputStream os = null;
-		try {
-			os = new BufferedOutputStream(new FileOutputStream(file, append));
-			byte data[] = new byte[sBufferSize];
-            for (int len; (len = is.read(data)) != -1; ) {
-                os.write(data, 0, len);
+    public static boolean writeFileFromIS(final File file,
+                                          final InputStream is,
+                                          final boolean append) {
+        return writeFileFromIS(file, is, append, null);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // writeFileFromIS with progress
+    ///////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Write file from input stream.
+     *
+     * @param filePath The path of file.
+     * @param is       The input stream.
+     * @param listener The progress update listener.
+     * @return {@code true}: success<br>{@code false}: fail
+     */
+    public static boolean writeFileFromIS(final String filePath,
+                                          final InputStream is,
+                                          final OnProgressUpdateListener listener) {
+        return writeFileFromIS(UtilsBridge.getFileByPath(filePath), is, false, listener);
+    }
+
+    /**
+     * Write file from input stream.
+     *
+     * @param filePath The path of file.
+     * @param is       The input stream.
+     * @param append   True to append, false otherwise.
+     * @param listener The progress update listener.
+     * @return {@code true}: success<br>{@code false}: fail
+     */
+    public static boolean writeFileFromIS(final String filePath,
+                                          final InputStream is,
+                                          final boolean append,
+                                          final OnProgressUpdateListener listener) {
+        return writeFileFromIS(UtilsBridge.getFileByPath(filePath), is, append, listener);
+    }
+
+    /**
+     * Write file from input stream.
+     *
+     * @param file     The file.
+     * @param is       The input stream.
+     * @param listener The progress update listener.
+     * @return {@code true}: success<br>{@code false}: fail
+     */
+    public static boolean writeFileFromIS(final File file,
+                                          final InputStream is,
+                                          final OnProgressUpdateListener listener) {
+        return writeFileFromIS(file, is, false, listener);
+    }
+
+    /**
+     * Write file from input stream.
+     *
+     * @param file     The file.
+     * @param is       The input stream.
+     * @param append   True to append, false otherwise.
+     * @param listener The progress update listener.
+     * @return {@code true}: success<br>{@code false}: fail
+     */
+    public static boolean writeFileFromIS(final File file,
+                                          final InputStream is,
+                                          final boolean append,
+                                          final OnProgressUpdateListener listener) {
+        if (is == null || !UtilsBridge.createOrExistsFile(file)) {
+            Log.e("FileIOUtils", "create file <" + file + "> failed.");
+            return false;
+        }
+        OutputStream os = null;
+        try {
+            os = new BufferedOutputStream(new FileOutputStream(file, append), sBufferSize);
+            if (listener == null) {
+                byte[] data = new byte[sBufferSize];
+                for (int len; (len = is.read(data)) != -1; ) {
+                    os.write(data, 0, len);
+                }
+            } else {
+                double totalSize = is.available();
+                int curSize = 0;
+                listener.onProgressUpdate(0);
+                byte[] data = new byte[sBufferSize];
+                for (int len; (len = is.read(data)) != -1; ) {
+                    os.write(data, 0, len);
+                    curSize += len;
+                    listener.onProgressUpdate(curSize / totalSize);
+                }
             }
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		} finally {
-			CloseUtils.closeIO(is, os);
-		}
-	}
-	
-	/**
-     * 将字节数组写入文件
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (os != null) {
+                    os.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    ///////////////////////////////////////////////////////////////////////////
+    // writeFileFromBytesByStream without progress
+    ///////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Write file from bytes by stream.
      *
      * @param filePath 文件路径
      * @param bytes    字节数组
      * @return {@code true}: 写入成功<br>{@code false}: 写入失败
      */
     public static boolean writeFileFromBytesByStream(final String filePath, final byte[] bytes) {
-        return writeFileFromBytesByStream(getFileByPath(filePath), bytes, false);
+        return writeFileFromBytesByStream(UtilsBridge.getFileByPath(filePath), bytes, false, null);
     }
 	
 	/**
@@ -120,8 +224,10 @@ public final class FileIOUtils {
      * @param append   是否追加在文件末
      * @return {@code true}: 写入成功<br>{@code false}: 写入失败
      */
-    public static boolean writeFileFromBytesByStream(final String filePath, final byte[] bytes, final boolean append) {
-        return writeFileFromBytesByStream(getFileByPath(filePath), bytes, append);
+    public static boolean writeFileFromBytesByStream(final String filePath,
+                                                     final byte[] bytes,
+                                                     final boolean append) {
+        return writeFileFromBytesByStream(UtilsBridge.getFileByPath(filePath), bytes, append, null);
     }
 	
 	/**
@@ -132,7 +238,7 @@ public final class FileIOUtils {
      * @return {@code true}: 写入成功<br>{@code false}: 写入失败
      */
     public static boolean writeFileFromBytesByStream(final File file, final byte[] bytes) {
-        return writeFileFromBytesByStream(file, bytes, false);
+        return writeFileFromBytesByStream(file, bytes, false, null);
     }
 	
 	/**
@@ -143,31 +249,89 @@ public final class FileIOUtils {
      * @param append 是否追加在文件末
      * @return {@code true}: 写入成功<br>{@code false}: 写入失败
      */
-	public static boolean writeFileFromBytesByStream(final File file, final byte[] bytes, final boolean append) {
-		if (bytes == null || !createOrExistsFile(file)) return false;
-		BufferedOutputStream bos = null;
-        try {
-            bos = new BufferedOutputStream(new FileOutputStream(file, append));
-            bos.write(bytes);
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            CloseUtils.closeIO(bos);
-        }
-	}
-	
-	/**
-     * 将字节数组写入文件
+    public static boolean writeFileFromBytesByStream(final File file,
+                                                     final byte[] bytes,
+                                                     final boolean append) {
+        return writeFileFromBytesByStream(file, bytes, append, null);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // writeFileFromBytesByStream with progress
+    ///////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Write file from bytes by stream.
+     *
+     * @param filePath The path of file.
+     * @param bytes    The bytes.
+     * @param listener The progress update listener.
+     * @return {@code true}: success<br>{@code false}: fail
+     */
+    public static boolean writeFileFromBytesByStream(final String filePath,
+                                                     final byte[] bytes,
+                                                     final OnProgressUpdateListener listener) {
+        return writeFileFromBytesByStream(UtilsBridge.getFileByPath(filePath), bytes, false, listener);
+    }
+
+    /**
+     * Write file from bytes by stream.
+     *
+     * @param filePath The path of file.
+     * @param bytes    The bytes.
+     * @param append   True to append, false otherwise.
+     * @param listener The progress update listener.
+     * @return {@code true}: success<br>{@code false}: fail
+     */
+    public static boolean writeFileFromBytesByStream(final String filePath,
+                                                     final byte[] bytes,
+                                                     final boolean append,
+                                                     final OnProgressUpdateListener listener) {
+        return writeFileFromBytesByStream(UtilsBridge.getFileByPath(filePath), bytes, append, listener);
+    }
+
+    /**
+     * Write file from bytes by stream.
+     *
+     * @param file     The file.
+     * @param bytes    The bytes.
+     * @param listener The progress update listener.
+     * @return {@code true}: success<br>{@code false}: fail
+     */
+    public static boolean writeFileFromBytesByStream(final File file,
+                                                     final byte[] bytes,
+                                                     final OnProgressUpdateListener listener) {
+        return writeFileFromBytesByStream(file, bytes, false, listener);
+    }
+
+    /**
+     * Write file from bytes by stream.
+     *
+     * @param file     The file.
+     * @param bytes    The bytes.
+     * @param append   True to append, false otherwise.
+     * @param listener The progress update listener.
+     * @return {@code true}: success<br>{@code false}: fail
+     */
+    public static boolean writeFileFromBytesByStream(final File file,
+                                                     final byte[] bytes,
+                                                     final boolean append,
+                                                     final OnProgressUpdateListener listener) {
+        if (bytes == null) return false;
+        return writeFileFromIS(file, new ByteArrayInputStream(bytes), append, listener);
+    }
+
+    /**
+     * Write file from bytes by channel.
      *
      * @param filePath 文件路径
      * @param bytes    字节数组
      * @param isForce  是否写入文件
      * @return {@code true}: 写入成功<br>{@code false}: 写入失败
      */
-    public static boolean writeFileFromBytesByChannel(final String filePath, final byte[] bytes, final boolean isForce) {
-        return writeFileFromBytesByChannel(getFileByPath(filePath), bytes, false, isForce);
+    public static boolean writeFileFromBytesByChannel(final String filePath,
+                                                      final byte[] bytes,
+                                                      final boolean isForce) {
+        return writeFileFromBytesByChannel(UtilsBridge.getFileByPath(filePath), bytes, false, isForce);
     }
 	
 	/**
@@ -179,8 +343,11 @@ public final class FileIOUtils {
      * @param isForce  是否写入文件
      * @return {@code true}: 写入成功<br>{@code false}: 写入失败
      */
-    public static boolean writeFileFromBytesByChannel(final String filePath, final byte[] bytes, final boolean append, final boolean isForce) {
-        return writeFileFromBytesByChannel(getFileByPath(filePath), bytes, append, isForce);
+    public static boolean writeFileFromBytesByChannel(final String filePath,
+                                                      final byte[] bytes,
+                                                      final boolean append,
+                                                      final boolean isForce) {
+        return writeFileFromBytesByChannel(UtilsBridge.getFileByPath(filePath), bytes, append, isForce);
     }
 	
 	/**
@@ -191,7 +358,9 @@ public final class FileIOUtils {
      * @param isForce 是否写入文件
      * @return {@code true}: 写入成功<br>{@code false}: 写入失败
      */
-    public static boolean writeFileFromBytesByChannel(final File file, final byte[] bytes, final boolean isForce) {
+    public static boolean writeFileFromBytesByChannel(final File file,
+                                                      final byte[] bytes,
+                                                      final boolean isForce) {
         return writeFileFromBytesByChannel(file, bytes, false, isForce);
     }
 	
@@ -204,32 +373,50 @@ public final class FileIOUtils {
      * @param isForce 是否写入文件
      * @return {@code true}: 写入成功<br>{@code false}: 写入失败
      */
-	public static boolean writeFileFromBytesByChannel(final File file, final byte[] bytes, final boolean append, final boolean isForce) {
-		if (bytes == null) return false;
-		FileChannel fc = null;
-		try {
-			fc = new FileOutputStream(file, append).getChannel();
-			fc.position(fc.size());
-			fc.write(ByteBuffer.wrap(bytes));
-			if (isForce) fc.force(true);
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		} finally {
-			CloseUtils.closeIO(fc);
-		}
-	}
-	
-	/**
-     * 将字节数组写入文件
+    public static boolean writeFileFromBytesByChannel(final File file,
+                                                      final byte[] bytes,
+                                                      final boolean append,
+                                                      final boolean isForce) {
+        if (bytes == null || !UtilsBridge.createOrExistsFile(file)) {
+            Log.e("FileIOUtils", "create file <" + file + "> failed.");
+            return false;
+        }
+        FileChannel fc = null;
+        try {
+            fc = new FileOutputStream(file, append).getChannel();
+            if (fc == null) {
+                Log.e("FileIOUtils", "fc is null.");
+                return false;
+            }
+            fc.position(fc.size());
+            fc.write(ByteBuffer.wrap(bytes));
+            if (isForce) fc.force(true);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                if (fc != null) {
+                    fc.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Write file from bytes by map.
      *
      * @param filePath 文件路径
      * @param bytes    字节数组
      * @param isForce  是否写入文件
      * @return {@code true}: 写入成功<br>{@code false}: 写入失败
      */
-    public static boolean writeFileFromBytesByMap(final String filePath, final byte[] bytes, final boolean isForce) {
+    public static boolean writeFileFromBytesByMap(final String filePath,
+                                                  final byte[] bytes,
+                                                  final boolean isForce) {
         return writeFileFromBytesByMap(filePath, bytes, false, isForce);
     }
 
@@ -242,8 +429,11 @@ public final class FileIOUtils {
      * @param isForce  是否写入文件
      * @return {@code true}: 写入成功<br>{@code false}: 写入失败
      */
-    public static boolean writeFileFromBytesByMap(final String filePath, final byte[] bytes, final boolean append, final boolean isForce) {
-        return writeFileFromBytesByMap(getFileByPath(filePath), bytes, append, isForce);
+    public static boolean writeFileFromBytesByMap(final String filePath,
+                                                  final byte[] bytes,
+                                                  final boolean append,
+                                                  final boolean isForce) {
+        return writeFileFromBytesByMap(UtilsBridge.getFileByPath(filePath), bytes, append, isForce);
     }
 
     /**
@@ -254,7 +444,9 @@ public final class FileIOUtils {
      * @param isForce 是否写入文件
      * @return {@code true}: 写入成功<br>{@code false}: 写入失败
      */
-    public static boolean writeFileFromBytesByMap(final File file, final byte[] bytes, final boolean isForce) {
+    public static boolean writeFileFromBytesByMap(final File file,
+                                                  final byte[] bytes,
+                                                  final boolean isForce) {
         return writeFileFromBytesByMap(file, bytes, false, isForce);
     }
 	
@@ -267,21 +459,37 @@ public final class FileIOUtils {
      * @param isForce 是否写入文件
      * @return {@code true}: 写入成功<br>{@code false}: 写入失败
      */
-    public static boolean writeFileFromBytesByMap(final File file, final byte[] bytes, final boolean append, final boolean isForce) {
-    	if (bytes == null || !createOrExistsFile(file)) return false;
+    public static boolean writeFileFromBytesByMap(final File file,
+                                                  final byte[] bytes,
+                                                  final boolean append,
+                                                  final boolean isForce) {
+        if (bytes == null || !UtilsBridge.createOrExistsFile(file)) {
+            Log.e("FileIOUtils", "create file <" + file + "> failed.");
+            return false;
+        }
         FileChannel fc = null;
         try {
-			fc = new FileOutputStream(file, append).getChannel();
-			MappedByteBuffer mbb = fc.map(FileChannel.MapMode.READ_WRITE, fc.size(), bytes.length);
-			mbb.put(bytes);
-			if (isForce) mbb.force();
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		} finally {
-			CloseUtils.closeIO(fc);
-		}
+            fc = new FileOutputStream(file, append).getChannel();
+            if (fc == null) {
+                Log.e("FileIOUtils", "fc is null.");
+                return false;
+            }
+            MappedByteBuffer mbb = fc.map(FileChannel.MapMode.READ_WRITE, fc.size(), bytes.length);
+            mbb.put(bytes);
+            if (isForce) mbb.force();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                if (fc != null) {
+                    fc.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
     
     /**
@@ -292,7 +500,7 @@ public final class FileIOUtils {
      * @return {@code true}: 写入成功<br>{@code false}: 写入失败
      */
     public static boolean writeFileFromString(final String filePath, final String content) {
-        return writeFileFromString(getFileByPath(filePath), content, false);
+        return writeFileFromString(UtilsBridge.getFileByPath(filePath), content, false);
     }
 
     /**
@@ -303,8 +511,10 @@ public final class FileIOUtils {
      * @param append   是否追加在文件末
      * @return {@code true}: 写入成功<br>{@code false}: 写入失败
      */
-    public static boolean writeFileFromString(final String filePath, final String content, final boolean append) {
-        return writeFileFromString(getFileByPath(filePath), content, append);
+    public static boolean writeFileFromString(final String filePath,
+                                              final String content,
+                                              final boolean append) {
+        return writeFileFromString(UtilsBridge.getFileByPath(filePath), content, append);
     }
 
     /**
@@ -326,20 +536,31 @@ public final class FileIOUtils {
      * @param append  是否追加在文件末
      * @return {@code true}: 写入成功<br>{@code false}: 写入失败
      */
-    public static boolean writeFileFromString(final File file, final String content, final boolean append) {
-    	if (file == null || content == null) return false;
-    	if (!createOrExistsFile(file)) return false;
-    	BufferedWriter bw = null;
-    	try {
-			bw = new BufferedWriter(new FileWriter(file, append));
-			bw.write(content);
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
+    public static boolean writeFileFromString(final File file,
+                                              final String content,
+                                              final boolean append) {
+        if (file == null || content == null) return false;
+        if (!UtilsBridge.createOrExistsFile(file)) {
+            Log.e("FileIOUtils", "create file <" + file + "> failed.");
             return false;
-		} finally {
-			CloseUtils.closeIO(bw);
-		}
+        }
+        BufferedWriter bw = null;
+        try {
+            bw = new BufferedWriter(new FileWriter(file, append));
+            bw.write(content);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                if (bw != null) {
+                    bw.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
     
     ///////////////////////////////////////////////////////////////////////////
@@ -353,7 +574,7 @@ public final class FileIOUtils {
      * @return 字符串链表中
      */
     public static List<String> readFile2List(final String filePath) {
-        return readFile2List(getFileByPath(filePath), null);
+        return readFile2List(UtilsBridge.getFileByPath(filePath), null);
     }
 
     /**
@@ -364,7 +585,7 @@ public final class FileIOUtils {
      * @return 字符串链表中
      */
     public static List<String> readFile2List(final String filePath, final String charsetName) {
-        return readFile2List(getFileByPath(filePath), charsetName);
+        return readFile2List(UtilsBridge.getFileByPath(filePath), charsetName);
     }
     
     /**
@@ -397,7 +618,7 @@ public final class FileIOUtils {
      * @return 字符串链表中
      */
     public static List<String> readFile2List(final String filePath, final int st, final int end) {
-        return readFile2List(getFileByPath(filePath), st, end, null);
+        return readFile2List(UtilsBridge.getFileByPath(filePath), st, end, null);
     }
     
     /**
@@ -409,8 +630,11 @@ public final class FileIOUtils {
      * @param charsetName 编码格式
      * @return 字符串链表中
      */
-    public static List<String> readFile2List(final String filePath, final int st, final int end, final String charsetName) {
-        return readFile2List(getFileByPath(filePath), st, end, charsetName);
+    public static List<String> readFile2List(final String filePath,
+                                             final int st,
+                                             final int end,
+                                             final String charsetName) {
+        return readFile2List(UtilsBridge.getFileByPath(filePath), st, end, charsetName);
     }
     
     /**
@@ -429,36 +653,47 @@ public final class FileIOUtils {
      * 读取文件到字符串链表中
      *
      * @param file        文件
-     * @param start       需要读取的开始行数
+     * @param st       需要读取的开始行数
      * @param end         需要读取的结束行数
      * @param charsetName 编码格式
      * @return 字符串链表中
      */
-    public static List<String> readFile2List(final File file, final int start, final int end, final String charsetName) {
-    	if (!isFileExists(file)) return null;
-    	if (start > end) return null;
-    	BufferedReader reader = null;
-    	try {
-			String line;
-			int curLine = 1;
-			List<String> list = new ArrayList<String>();
-			if (isSpace(charsetName)) {
-				reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-			} else {
-				reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), charsetName));
-			}
-			while ((line = reader.readLine()) != null) {
-				if (curLine > end) break;
-				if (start <= curLine && curLine <= end) list.add(line);
-				++curLine;
-			}
-			return list;
-		} catch (Exception e) {
-			e.printStackTrace();
+    public static List<String> readFile2List(final File file,
+                                             final int st,
+                                             final int end,
+                                             final String charsetName) {
+        if (!UtilsBridge.isFileExists(file)) return null;
+        if (st > end) return null;
+        BufferedReader reader = null;
+        try {
+            String line;
+            int curLine = 1;
+            List<String> list = new ArrayList<>();
+            if (UtilsBridge.isSpace(charsetName)) {
+                reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+            } else {
+                reader = new BufferedReader(
+                        new InputStreamReader(new FileInputStream(file), charsetName)
+                );
+            }
+            while ((line = reader.readLine()) != null) {
+                if (curLine > end) break;
+                if (st <= curLine && curLine <= end) list.add(line);
+                ++curLine;
+            }
+            return list;
+        } catch (IOException e) {
+            e.printStackTrace();
             return null;
-		} finally {
-			CloseUtils.closeIO(reader);
-		}
+        } finally {
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
     
     /**
@@ -468,7 +703,7 @@ public final class FileIOUtils {
      * @return 字符串
      */
     public static String readFile2String(final String filePath) {
-        return readFile2String(getFileByPath(filePath), null);
+        return readFile2String(UtilsBridge.getFileByPath(filePath), null);
     }
 
     /**
@@ -479,7 +714,7 @@ public final class FileIOUtils {
      * @return 字符串
      */
     public static String readFile2String(final String filePath, final String charsetName) {
-        return readFile2String(getFileByPath(filePath), charsetName);
+        return readFile2String(UtilsBridge.getFileByPath(filePath), charsetName);
     }
 
     /**
@@ -500,11 +735,11 @@ public final class FileIOUtils {
      * @return 字符串
      */
     public static String readFile2String(final File file, final String charsetName) {
-    	if (!isFileExists(file)) return null;
+    	if (!UtilsBridge.isFileExists(file)) return null;
         BufferedReader reader = null;
         try {
         	StringBuilder sb = new StringBuilder();
-        	if (isSpace(charsetName)) {
+        	if (UtilsBridge.isSpace(charsetName)) {
                 reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
             } else {
                 reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), charsetName));
@@ -536,7 +771,7 @@ public final class FileIOUtils {
     public static String readFile2String2(final File file, final String charsetName) {
         byte[] bytes = readFile2BytesByStream(file);
         if (bytes == null) return null;
-        if (isSpace(charsetName)) {
+        if (UtilsBridge.isSpace(charsetName)) {
             return new String(bytes);
         } else {
             try {
@@ -548,7 +783,10 @@ public final class FileIOUtils {
         }
     }
 
-    
+    ///////////////////////////////////////////////////////////////////////////
+    // readFile2BytesByStream without progress
+    ///////////////////////////////////////////////////////////////////////////
+
     /**
      * 读取文件到字节数组中
      *
@@ -556,33 +794,86 @@ public final class FileIOUtils {
      * @return 字符数组
      */
     public static byte[] readFile2BytesByStream(final String filePath) {
-        return readFile2BytesByStream(getFileByPath(filePath));
+        return readFile2BytesByStream(UtilsBridge.getFileByPath(filePath), null);
     }
-    
+	
+	/**
+     * Return the bytes in file by stream.
+     *
+     * @param file The file.
+     * @return the bytes in file
+     */
+    public static byte[] readFile2BytesByStream(final File file) {
+        return readFile2BytesByStream(file, null);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // readFile2BytesByStream with progress
+    ///////////////////////////////////////////////////////////////////////////
+
     /**
-     * 读取文件到字节数组中
+     * Return the bytes in file by stream.
+     *
+     * @param filePath The path of file.
+     * @param listener The progress update listener.
+     * @return the bytes in file
+     */
+    public static byte[] readFile2BytesByStream(final String filePath,
+                                                final OnProgressUpdateListener listener) {
+        return readFile2BytesByStream(UtilsBridge.getFileByPath(filePath), listener);
+    }
+
+    /**
+     * Return the bytes in file by stream.
      *
      * @param file 文件
      * @return 字符数组
      */
-    public static byte[] readFile2BytesByStream(final File file) {
-    	if (!isFileExists(file)) return null;
-    	FileInputStream fis = null;
-    	ByteArrayOutputStream os = null;
-    	try {
-    		fis = new FileInputStream(file);
-    		os = new ByteArrayOutputStream();
-    		byte[] b = new byte[sBufferSize];
-    		int len;
-    		while ((len = fis.read(b, 0, sBufferSize)) != -1) {
-    			os.write(b, 0, len);
-    		}
-    		return os.toByteArray();
-    	} catch (IOException e) {
+    public static byte[] readFile2BytesByStream(final File file,
+                                                final OnProgressUpdateListener listener) {
+        if (!UtilsBridge.isFileExists(file)) return null;
+        try {
+            ByteArrayOutputStream os = null;
+            InputStream is = new BufferedInputStream(new FileInputStream(file), sBufferSize);
+            try {
+                os = new ByteArrayOutputStream();
+                byte[] b = new byte[sBufferSize];
+                int len;
+                if (listener == null) {
+                    while ((len = is.read(b, 0, sBufferSize)) != -1) {
+                        os.write(b, 0, len);
+                    }
+                } else {
+                    double totalSize = is.available();
+                    int curSize = 0;
+                    listener.onProgressUpdate(0);
+                    while ((len = is.read(b, 0, sBufferSize)) != -1) {
+                        os.write(b, 0, len);
+                        curSize += len;
+                        listener.onProgressUpdate(curSize / totalSize);
+                    }
+                }
+                return os.toByteArray();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            } finally {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    if (os != null) {
+                        os.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
             return null;
-        } finally {
-            CloseUtils.closeIO(fis, os);
         }
     }
 
@@ -594,7 +885,7 @@ public final class FileIOUtils {
      * @return the bytes in file
      */
     public static byte[] readFile2BytesByStream2(final File file) {
-        if (!isFileExists(file)) return null;
+        if (!UtilsBridge.isFileExists(file)) return null;
         try {
             return is2Bytes(new FileInputStream(file));
         } catch (FileNotFoundException e) {
@@ -611,7 +902,7 @@ public final class FileIOUtils {
      * @return 字符数组
      */
     public static byte[] readFile2BytesByChannel(final String filePath) {
-        return readFile2BytesByChannel(getFileByPath(filePath));
+        return readFile2BytesByChannel(UtilsBridge.getFileByPath(filePath));
     }
 
     /**
@@ -621,20 +912,30 @@ public final class FileIOUtils {
      * @return 字符数组
      */
     public static byte[] readFile2BytesByChannel(final File file) {
-    	if (!isFileExists(file)) return null;
+        if (!UtilsBridge.isFileExists(file)) return null;
         FileChannel fc = null;
         try {
-        	fc = new RandomAccessFile(file, "r").getChannel();
-        	ByteBuffer byteBuffer = ByteBuffer.allocate((int) fc.size());
-        	while (true) {
-				if (!(fc.read(byteBuffer) > 0)) break;
-			}
-        	return byteBuffer.array();
+            fc = new RandomAccessFile(file, "r").getChannel();
+            if (fc == null) {
+                Log.e("FileIOUtils", "fc is null.");
+                return new byte[0];
+            }
+            ByteBuffer byteBuffer = ByteBuffer.allocate((int) fc.size());
+            while (true) {
+                if (!((fc.read(byteBuffer)) > 0)) break;
+            }
+            return byteBuffer.array();
         } catch (IOException e) {
             e.printStackTrace();
             return null;
         } finally {
-            CloseUtils.closeIO(fc);
+            try {
+                if (fc != null) {
+                    fc.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
     
@@ -645,7 +946,7 @@ public final class FileIOUtils {
      * @return 字符数组
      */
     public static byte[] readFile2BytesByMap(final String filePath) {
-        return readFile2BytesByMap(getFileByPath(filePath));
+        return readFile2BytesByMap(UtilsBridge.getFileByPath(filePath));
     }
 
     /**
@@ -654,11 +955,16 @@ public final class FileIOUtils {
      * @param file 文件
      * @return 字符数组
      */
+    
     public static byte[] readFile2BytesByMap(final File file) {
-    	if (!isFileExists(file)) return null;
+        if (!UtilsBridge.isFileExists(file)) return null;
         FileChannel fc = null;
         try {
             fc = new RandomAccessFile(file, "r").getChannel();
+            if (fc == null) {
+                Log.e("FileIOUtils", "fc is null.");
+                return new byte[0];
+            }
             int size = (int) fc.size();
             MappedByteBuffer mbb = fc.map(FileChannel.MapMode.READ_ONLY, 0, size).load();
             byte[] result = new byte[size];
@@ -668,7 +974,13 @@ public final class FileIOUtils {
             e.printStackTrace();
             return null;
         } finally {
-            CloseUtils.closeIO(fc);
+            try {
+                if (fc != null) {
+                    fc.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
     
@@ -676,9 +988,9 @@ public final class FileIOUtils {
      * MappedByteBuffer资源释放
      * @param buffer
      * @throws Exception
-     */
+     *//*
     @SuppressWarnings("unchecked")
-	/*public static void clean(final Object buffer) throws Exception {
+	public static void clean(final Object buffer) throws Exception {
     	AccessController.doPrivileged(new PrivilegedAction() {
 			@Override
 			public Object run() {
@@ -738,42 +1050,8 @@ public final class FileIOUtils {
         sBufferSize = bufferSize;
     }
 	
-	private static File getFileByPath(final String filePath) {
-        return isSpace(filePath) ? null : new File(filePath);
-    }
-	
-	private static boolean createOrExistsFile(final String filePath) {
-        return createOrExistsFile(getFileByPath(filePath));
-    }
-	
-	private static boolean createOrExistsFile(final File file) {
-        if (file == null) return false;
-        if (file.exists()) return file.isFile();
-        if (!createOrExistsDir(file.getParentFile())) return false;
-        try {
-            return file.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-	
-	private static boolean createOrExistsDir(final File file) {
-        return file != null && (file.exists() ? file.isDirectory() : file.mkdirs());
-    }
-	
-	private static boolean isFileExists(final File file) {
-        return file != null && file.exists();
-    }
-	
-	private static boolean isSpace(final String s) {
-        if (s == null) return true;
-        for (int i = 0, len = s.length(); i < len; ++i) {
-            if (!Character.isWhitespace(s.charAt(i))) {
-                return false;
-            }
-        }
-        return true;
+	public interface OnProgressUpdateListener {
+        void onProgressUpdate(double progress);
     }
 
 

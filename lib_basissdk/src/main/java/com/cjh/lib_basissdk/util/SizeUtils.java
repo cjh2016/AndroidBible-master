@@ -1,5 +1,6 @@
 package com.cjh.lib_basissdk.util;
 
+import android.content.res.Resources;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
@@ -22,7 +23,7 @@ public final class SizeUtils {
      */
 	public static int dp2px(final float dpValue) {
 		
-		final float scale = Utils.getApp().getResources().getDisplayMetrics().density;
+        final float scale = Resources.getSystem().getDisplayMetrics().density;
 		//加0.5f是为了抵消四舍五入舍弃的小数点,下面的都同理
 		return (int) (dpValue * scale + 0.5f);
 	}
@@ -34,7 +35,7 @@ public final class SizeUtils {
      * @return dp 值
      */
     public static int px2dp(final float pxValue) {
-        final float scale = Utils.getApp().getResources().getDisplayMetrics().density;
+        final float scale = Resources.getSystem().getDisplayMetrics().density;
         return (int) (pxValue / scale + 0.5f);
     }
     
@@ -45,7 +46,7 @@ public final class SizeUtils {
      * @return px 值
      */
     public static int sp2px(final float spValue) {
-        final float fontScale = Utils.getApp().getResources().getDisplayMetrics().scaledDensity;
+        final float fontScale = Resources.getSystem().getDisplayMetrics().scaledDensity;
         return (int) (spValue * fontScale + 0.5f);
     }
     
@@ -56,7 +57,7 @@ public final class SizeUtils {
      * @return sp 值
      */
     public static int px2sp(final float pxValue) {
-        final float fontScale = Utils.getApp().getResources().getDisplayMetrics().scaledDensity;
+        final float fontScale = Resources.getSystem().getDisplayMetrics().scaledDensity;
         return (int) (pxValue / fontScale + 0.5f);
     }
     
@@ -66,11 +67,10 @@ public final class SizeUtils {
      *
      * @param unit    单位   (转化之前的单位,这里指value的单位dp)
      * @param value   值
-     * @param metrics DisplayMetrics
      * @return 转换结果
      */
-    public static float applyDimension(final int unit, final float value, final DisplayMetrics metrics) {
-    	
+    public static float applyDimension(final float value, final int unit) {
+        DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
     	switch (unit) {
 			case TypedValue.COMPLEX_UNIT_PX:
 				return value;
@@ -104,7 +104,7 @@ public final class SizeUtils {
      * @param view     视图
      * @param listener 监听器
      */
-    public static void forceGetViewSize(final View view, final onGetSizeListener listener) {
+    public static void forceGetViewSize(final View view, final OnGetSizeListener listener) {
         view.post(new Runnable() {
             @Override
             public void run() {
@@ -118,7 +118,7 @@ public final class SizeUtils {
     /**
      * 获取到 View 尺寸的监听
      */
-    public interface onGetSizeListener {
+    public interface OnGetSizeListener {
     	void onGetSize(View view);
     }
     
@@ -129,24 +129,23 @@ public final class SizeUtils {
      * @return arr[0]: 视图宽度, arr[1]: 视图高度
      */
     public static int[] measureView(final View view) {
-    	
-    	ViewGroup.LayoutParams lp = view.getLayoutParams();
-    	if (lp == null) {
-    		lp = new ViewGroup.LayoutParams(
-    				ViewGroup.LayoutParams.MATCH_PARENT, 
-    				ViewGroup.LayoutParams.WRAP_CONTENT);
-    	}
-    	
-    	int widthSpec = ViewGroup.getChildMeasureSpec(0, 0, lp.width);
-    	int lpHeight = lp.height;
-    	int heightSpec;
-    	if (lpHeight > 0) {
-    		heightSpec = View.MeasureSpec.makeMeasureSpec(lpHeight, View.MeasureSpec.EXACTLY);
-    	} else {
-    		heightSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-    	}
-    	view.measure(widthSpec, heightSpec);
-    	return new int[]{view.getMeasuredWidth(), view.getMeasuredHeight()};
+        ViewGroup.LayoutParams lp = view.getLayoutParams();
+        if (lp == null) {
+            lp = new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+        }
+        int widthSpec = ViewGroup.getChildMeasureSpec(0, 0, lp.width);
+        int lpHeight = lp.height;
+        int heightSpec;
+        if (lpHeight > 0) {
+            heightSpec = View.MeasureSpec.makeMeasureSpec(lpHeight, View.MeasureSpec.EXACTLY);
+        } else {
+            heightSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+        }
+        view.measure(widthSpec, heightSpec);
+        return new int[]{view.getMeasuredWidth(), view.getMeasuredHeight()};
     }
     
     /**
