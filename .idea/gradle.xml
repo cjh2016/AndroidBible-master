@@ -24,6 +24,7 @@
             <option value="$PROJECT_DIR$/component_xfermode" />
             <option value="$PROJECT_DIR$/lib_basissdk" />
             <option value="$PROJECT_DIR$/lib_common" />
+            <option value="$PROJECT_DIR$/lib_framework" />
             <option value="$PROJECT_DIR$/lib_opensource" />
           </set>
         </option>
