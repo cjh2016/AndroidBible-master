@@ -31,12 +31,14 @@ versions.fileprovider = ""
 versions.gson = "2.8.6"
 versions.glide = "4.8.0"
 versions.gradle_android_plugin_aspectjx = "2.0.0"
+versions.greendao_gradle_plugin = "3.3.0"
+versions.greendao = "3.3.0"
 
 versions.hamcrest = "1.3"
 
 versions.junit = "4.12"
 
-versions.kotlin = "1.3.31"
+versions.kotlin = "1.3.61"
 
 versions.legacy = "1.0.0"
 versions.lifecycle = "2.1.0"
@@ -228,6 +230,10 @@ def gson = [:]
 gson.gson = "com.google.code.gson:gson:$versions.gson"
 deps.gson = gson
 
+def greendao = [:]
+greendao.greendao = "org.greenrobot:greendao:$versions.greendao"
+deps.greendao = greendao
+
 def eventbus = [:]
 eventbus.eventbus = "org.greenrobot:eventbus:$versions.eventbus"
 deps.eventbus = eventbus
@@ -264,6 +270,7 @@ def plugin = [:]
 plugin.kotlin_gradle_plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
 plugin.android_gradle_plugin = "com.android.tools.build:gradle:$versions.android_gradle_plugin"
 plugin.gradle_android_plugin_aspectjx = "com.hujiang.aspectjx:gradle-android-plugin-aspectjx:$versions.gradle_android_plugin_aspectjx"
+plugin.greendao_gradle_plugin = "org.greenrobot:greendao-gradle-plugin:$versions.greendao_gradle_plugin"
 deps.plugin = plugin
 
 

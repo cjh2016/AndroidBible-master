@@ -57,7 +57,7 @@ class SparkSpan(context: Context) : ReplacementSpan() {
         for (i in start until end) {
             drawSparkle(canvas, x, top + percent * bottom, mWidth.toFloat())
         }
-        canvas.drawText(text, start, end, x, y.toFloat(), paint)
+        canvas.drawText(text!!, start, end, x, y.toFloat(), paint)
     }
 
     private fun drawSparkle(canvas: Canvas, offset: Float, startY: Float, width: Float) {

@@ -1,5 +1,10 @@
 package com.cjh.lib_basissdk.util;
 
+import android.content.res.Resources;
+
+import androidx.annotation.ArrayRes;
+import androidx.annotation.StringRes;
+
 import com.cjh.lib_basissdk.util.algorithm.BCConvert;
 import com.cjh.lib_basissdk.util.algorithm.StringImpl;
 

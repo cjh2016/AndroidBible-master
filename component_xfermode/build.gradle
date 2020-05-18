@@ -1,4 +1,8 @@
-apply plugin: 'com.android.application'
+if (isRunAlone.toBoolean()) {
+    apply plugin: 'com.android.application'
+} else {
+    apply plugin: 'com.android.library'
+}
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
@@ -7,7 +11,9 @@ android {
     buildToolsVersion "29.0.2"
 
     defaultConfig {
-        applicationId "com.cjh.component_xfermode"
+        if (isRunAlone.toBoolean()) {
+            applicationId "com.cjh.component_xfermode"
+        }
         minSdkVersion build_versions.min_sdk
         targetSdkVersion 29
         versionCode 1

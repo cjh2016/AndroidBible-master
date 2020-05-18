@@ -70,6 +70,10 @@ dependencies {
     api (deps.glide.glide) {
         exclude group: 'com.android.support'
     }
+    annotationProcessor deps.glide.compiler
+    api 'jp.wasabeef:glide-transformations:4.0.0'
+    // If you want to use the GPU Filters
+    api 'jp.co.cyberagent.android:gpuimage:2.0.3'
 
     //arouter
     api deps.arouter.runtime
@@ -123,5 +127,9 @@ dependencies {
 
     //gson
     api deps.gson.gson
+
+    //greendao
+    api deps.greendao.greendao
+
 
 }
