@@ -275,7 +275,7 @@ deps.plugin = plugin
 
 
 def build_versions = [:]
-build_versions.min_sdk = 19
+build_versions.min_sdk = 21
 build_versions.target_sdk = 29
 build_versions.version_code = 100
 build_versions.version_name = "1.0.0"

@@ -12,9 +12,11 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/component_animation" />
             <option value="$PROJECT_DIR$/component_customview" />
             <option value="$PROJECT_DIR$/component_fragment" />
             <option value="$PROJECT_DIR$/component_ipc_service" />
+            <option value="$PROJECT_DIR$/component_jetpack" />
             <option value="$PROJECT_DIR$/component_materialdesign" />
             <option value="$PROJECT_DIR$/component_nestedscroll" />
             <option value="$PROJECT_DIR$/component_textview" />

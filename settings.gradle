@@ -2,3 +2,5 @@ include ':app', ':lib_opensource', ':lib_basissdk', ':lib_common', ':component_u
 include ':component_customview'
 include ':component_xfermode'
 include ':lib_framework'
+include ':component_jetpack'
+include ':component_animation'

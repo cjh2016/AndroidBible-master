@@ -13,6 +13,6 @@ public class GlideImageLoader implements ImageLoader {
 
     @Override
     public Bitmap loadBitmap(String uri, int reqWidth, int reqHeight) {
-        return GlideUtils.loadImg();
+        return null;
     }
 }
