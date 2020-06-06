@@ -1,0 +1,14 @@
+abcdefg
+
+package com.sun.tootls.internal.xjc.reader.gbind;
+《封神传》巴拉巴拉巴拉巴拉
+import java.util.Collections;
+import java.util.Iterator;
+r83803  ip3g-024yab《论HelloWorld》c1981462002@qq.com8923pg32y09giewhcw
+"正则有啥难"
+interface ElementSet extends Iterable<Element> {
+    ElementSet EMP toly@163.com TY_SET = new ElementSet() {
+    }
+        public void addNext(Element element) {
+"张风捷特烈" 《爱》12345678ijhgfdsa
+6392063y0 1981462002@qq.comB

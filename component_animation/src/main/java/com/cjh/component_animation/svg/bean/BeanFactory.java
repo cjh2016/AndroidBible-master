@@ -1,13 +1,13 @@
 package com.cjh.component_animation.svg.bean;
 
 
-import com.toly1994.toly_test.Cons.ResData;
+/*import com.toly1994.toly_test.Cons.ResData;
 import com.toly1994.toly_test.Cons.ZData;
 import com.toly1994.toly_test.R;
 import com.toly1994.toly_test.random.ZRandom;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.List;*/
 
 /**
  * 作者：张风捷特烈<br/>
@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class BeanFactory {
 
-    public static List<GoodsBean> getGoodsBeans() {
+    /*public static List<GoodsBean> getGoodsBeans() {
         List<GoodsBean> beans = new ArrayList<>();
 
         for (int i = 0; i < 8; i++) {
@@ -42,11 +42,11 @@ public class BeanFactory {
     }
 
 
-    /**
+    *//**
      * 获取头像信息
      *
      * @return
-     */
+     *//*
     public static GoodsBean getGoodsBean(int id) {
         GoodsBean goodsBean = new GoodsBean();
         goodsBean.setBuyNum(ZRandom.rangeInt(100, 10000));
@@ -57,12 +57,12 @@ public class BeanFactory {
 
     }
 
-    /**
+    *//**
      * 获取头像信息
      *
      * @param len
      * @return
-     */
+     *//*
     public static List<IconInfo> getHeadInfos(int len) {
         List<IconInfo> beans = new ArrayList<>();
         for (int i = 0; i < len; i++) {
@@ -71,22 +71,22 @@ public class BeanFactory {
         return beans;
     }
 
-    /**
+    *//**
      * 获取头像信息
      *
      * @return
-     */
+     *//*
     public static IconInfo getHeadInfo() {
         return new IconInfo(ResData.REA_HEAD_ICON[ZRandom.rangeInt(0, 90 - 1)], ZRandom.randomCnName());
 
     }
 
 
-    /**
+    *//**
      * 获取随机聊天消息
      *
      * @return
-     */
+     *//*
     public static List<MsgBean> getMsgBeans(int count) {
         List<MsgBean> beans = new ArrayList<>();
         for (int i = 0; i < count; i++) {
@@ -98,7 +98,7 @@ public class BeanFactory {
                     ZRandom.randomChar(ZData.SEN_CONG_CONG)));
         }
         return beans;
-    }
+    }*/
 
 
 }

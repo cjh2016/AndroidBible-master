@@ -2,16 +2,16 @@ package com.cjh.component_jetpack.databinding;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.text.Editable;
 import android.util.Log;
-
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.Observable;
+import androidx.databinding.ObservableArrayList;
+import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableList;
 
+import com.cjh.component_jetpack.BR;
 import com.cjh.component_jetpack.R;
 import com.cjh.component_jetpack.model.Goods;
 import com.cjh.component_jetpack.model.ObservableGoods;
@@ -29,15 +29,16 @@ import com.cjh.component_jetpack.model.User;
  */
 public class DataBindingActivity extends AppCompatActivity {
 
+    //activity_data_binding.xml -> ActivityDataBindingBinding，xml文件名决定了生成的binding类名，xml+Binding
     private ActivityDataBindingBinding mBinding;
     private Goods mGoods;
     private ObservableGoods mObservableGoods;
     private ObservableList<String> mObservableList;
 
-    public static final String TAG = "DataBindingActivity";
+    private static final String TAG = "DataBindingActivity";
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_data_binding);
         User user = new User("姓名", "密码");
@@ -49,30 +50,36 @@ public class DataBindingActivity extends AppCompatActivity {
         mGoods = new Goods("食物名字", "食物详情", 123f);
         mBinding.setGoods(mGoods);
         mBinding.setHandler(new Handler());
-
         //可以监听属性变化
         mGoods.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
-                if () {
-
-                } else if () {
-
-                } else if () {
-
+                if (propertyId == BR.name) {
+                    Log.e(TAG, "BR.name");
+                } else if (propertyId == BR.details) {
+                    Log.e(TAG, "BR.details");
+                } else if (propertyId == BR._all) {
+                    Log.e(TAG, "BR._all");
                 } else {
-
+                    Log.e(TAG, "other");
                 }
+                //全字段更新时，收到的是BR._all，而不是每个字段挨个收到通知
             }
         });
 
+        mObservableGoods = new ObservableGoods();
+        mObservableGoods.setName(new ObservableField<String>("可观察域-名字"));
+        mBinding.setObservableGoods(mObservableGoods);
 
+        mObservableList = new ObservableArrayList<>();
+        mObservableList.add("ObservableList第一个元素");
+        mBinding.setObservableList(mObservableList);
 
+        mBinding.setImgUrl("https://www.wanandroid.com/resources/image/pc/logo.png");
+//        mBinding.setImgUrl(DataUtil.getImgByIdx(0));
     }
 
-
     public class Handler {
-
         public void changePart() {
             mGoods.setName("食物名字-部分改变");
             mGoods.setPrice(456f);//价格是不会更新的
@@ -96,9 +103,5 @@ public class DataBindingActivity extends AppCompatActivity {
             /*Intent intent = new Intent(DataBindingActivity.this, DbRecyclerViewActivity.class);
             startActivity(intent);*/
         }
-
     }
-
-
 }
-

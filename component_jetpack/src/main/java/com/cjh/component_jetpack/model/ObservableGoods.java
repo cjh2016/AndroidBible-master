@@ -18,6 +18,9 @@ public class ObservableGoods {
 
     private ObservableField<String> details;
 
+    public ObservableGoods() {
+    }
+
 
     public ObservableGoods(ObservableField<String> name, ObservableFloat price,
                            ObservableField<String> details) {

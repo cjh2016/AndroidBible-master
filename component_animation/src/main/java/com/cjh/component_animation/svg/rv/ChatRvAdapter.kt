@@ -1,6 +1,7 @@
 package com.cjh.component_animation.svg.rv
 
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.view.menu.MenuView
 import androidx.recyclerview.widget.RecyclerView
@@ -12,7 +13,7 @@ import com.cjh.component_animation.svg.bean.MsgBean
  * @date: 2020/5/30 14:39
  * @description:
  */
-class ChatRvAdapter: RecyclerView.Adapter<ChatRvAdapter.MyViewHolder>() {
+class ChatRvAdapter {
 
     constructor(data: List<MsgBean>) {
 
@@ -20,8 +21,10 @@ class ChatRvAdapter: RecyclerView.Adapter<ChatRvAdapter.MyViewHolder>() {
 
     class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
-        private var mItemTv: TextView = itemView.findViewById(R.id.id_tv_chat_msg)
-        private var mItemTvTime: TextView = itemView.findViewById(R.id.id_tv_time)
+        //private var mItemTv: TextView = itemView.findViewById(R.id.id_tv_chat_msg)
+        //private var mItemTvTime: TextView = itemView.findViewById(R.id.id_tv_time)
 
     }
+
+
 }
