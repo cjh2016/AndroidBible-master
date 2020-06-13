@@ -9,7 +9,9 @@ import androidx.databinding.DataBindingUtil;
 
 import com.cjh.component_jetpack.databinding.ActivityMainBinding;
 import com.cjh.component_jetpack.databinding.DataBindingActivity;
+import com.cjh.component_jetpack.lifecycle.LifecycleActivity;
 import com.cjh.component_jetpack.model.User;
+import com.cjh.component_jetpack.viewmodel_livedata.ViewModelActivity;
 
 /**
  * an app for study jetpack
@@ -37,11 +39,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void gotoLifecycles(View view) {
-        //startActivity(getIntentByClass(LifecycleActivity.class));
+        startActivity(getIntentByClass(LifecycleActivity.class));
     }
 
     public void gotoViewModel_LiveData(View view) {
-        //startActivity(getIntentByClass(ViewModelActivity.class));
+        startActivity(getIntentByClass(ViewModelActivity.class));
     }
 
     public void gotoWorkManager(View view) {

@@ -20,6 +20,9 @@
         </activity>
 
         <activity android:name=".databinding.DataBindingActivity"/>
+        <activity android:name=".databinding.DbRecyclerViewActivity"/>
+        <activity android:name=".lifecycle.LifecycleActivity"/>
+        <activity android:name=".viewmodel_livedata.ViewModelActivity"/>
 
 
     </application>

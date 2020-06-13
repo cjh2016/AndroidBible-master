@@ -100,8 +100,8 @@ public class DataBindingActivity extends AppCompatActivity {
         }
 
         public void gotoRecyclerView() {
-            /*Intent intent = new Intent(DataBindingActivity.this, DbRecyclerViewActivity.class);
-            startActivity(intent);*/
+            Intent intent = new Intent(DataBindingActivity.this, DbRecyclerViewActivity.class);
+            startActivity(intent);
         }
     }
 }

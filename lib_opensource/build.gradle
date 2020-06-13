@@ -69,6 +69,7 @@ dependencies {
 
     //lifecycle
     api deps.lifecycle.extensions
+    api deps.lifecycle.java8
     annotationProcessor deps.lifecycle.compiler
 
     //glide
