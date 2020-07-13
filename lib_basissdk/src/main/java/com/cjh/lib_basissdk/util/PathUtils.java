@@ -10,8 +10,11 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 
 import androidx.annotation.RequiresApi;
+
+import java.io.File;
 
 /**
  * 路径相关工具类

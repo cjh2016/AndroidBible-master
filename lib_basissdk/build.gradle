@@ -44,4 +44,6 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     api project(':lib_opensource')
     implementation files('libs/chardet.jar')
+    implementation 'com.github.junrar:junrar:4.0.0'
+    implementation 'net.lingala.zip4j:zip4j:2.5.2'
 }

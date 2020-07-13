@@ -1,8 +1,11 @@
 package com.cjh.lib_basissdk.util;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -317,7 +320,7 @@ public final class SPUtils {
      * SP 中写入 String 集合
      *
      * @param key    键
-     * @param values 值
+     * @param value 值
      */
     public void put(@NonNull final String key, final Set<String> value) {
         put(key, value, false);
@@ -327,7 +330,7 @@ public final class SPUtils {
      * SP 中写入 String 集合
      *
      * @param key      键
-     * @param values   值
+     * @param value   值
      * @param isCommit {@code true}: {@link SharedPreferences.Editor#commit()}<br>
      *                 {@code false}: {@link SharedPreferences.Editor#apply()}
      */

@@ -65,12 +65,26 @@ public final class CheckUtil {
      * 判断一组对象是否有效
      * @param objs
      * @return
-     */
+     *//*
     public final static boolean valid(Object... objs) {
         if (objs != null && objs.length != 0) {
             return true;
         }
         return false;
+    }*/
+
+    /**
+     * 判断一组对象是否有效
+     * @param objs
+     * @return
+     */
+    public final static boolean valid(Object[] objs) {
+        for (Object obj : objs) {
+            if (!valid(obj)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**

@@ -21,6 +21,7 @@ class App : Application(), IBaseApp {
         onInitSpeed(this@App)
         //耗时处理
         onInitLow(this@App)
+
     }
 
     override fun attachBaseContext(base: Context?) {

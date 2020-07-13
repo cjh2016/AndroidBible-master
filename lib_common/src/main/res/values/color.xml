@@ -273,4 +273,38 @@
     <color name="navy">#000080</color><!--海军色 -->
 
     <color name="black">#000000</color><!--黑色 -->
+
+
+
+
+
+
+    <!--妃色-->
+    <color name="feise">#F07054</color>
+    <!--月白-->
+    <color name="yuebai">#DDEFF3</color>
+    <!--牙色-->
+    <color name="yase">#F1E3BC</color>
+    <!--竹青-->
+    <color name="zhuqing">#8CA279</color>
+
+    <!--品橙-->
+    <color name="pincheng">#FF7F47</color>
+    <!--捷特蓝-->
+    <color name="jietelan">#C8D5F7</color>
+
+
+    <color name="zise">#a22bec</color> <!-- 紫色 -->
+    <color name="transparent">#00000000</color> <!-- 透明色 -->
+
+
+    <color name="grassgreen">#99cc33</color>  <!-- 草绿色 -->
+
+    <color name="gray_cc">#cccccc</color>  <!-- 灰色cc -->
+
+    <color name="gray_8f">#8f8f8f</color>  <!-- 灰色8f -->
+
+
+    <color name="blue_dark">#303F9F</color>
+
 </resources>
