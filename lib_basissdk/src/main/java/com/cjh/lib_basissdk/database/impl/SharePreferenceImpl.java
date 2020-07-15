@@ -30,7 +30,7 @@ public final class SharePreferenceImpl<T extends DBDataBean> extends Singleton i
 
     public SharePreferenceImpl(Context context) {
         mEngine = SPUtils.getInstance(DBConstance.DB_SP_NAME);
-        mClass = (Class<T>) GenericsUtils.getSuperClassGenricType(SharePreferenceImpl.class);
+        mClass = (Class<T>) GenericsUtils.getSuperClassGenericType(SharePreferenceImpl.class);
     }
 
     @Override
